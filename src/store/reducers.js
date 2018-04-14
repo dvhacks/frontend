@@ -10,7 +10,7 @@ import simpleValues from './simpleValues/reducer'
 import theme from './theme/reducer'
 import { combineReducers } from 'redux'
 import { responsiveStateReducer } from 'redux-responsive'
-import rootReducer from "./rootReducer";
+import rootReducer from './rootReducer';
 
 export const appReducers = {
   ...firekitReducers,
