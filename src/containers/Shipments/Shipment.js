@@ -7,7 +7,6 @@ import { Activity } from 'rmw-shell'
 import { ResponsiveMenu } from 'material-ui-responsive-menu';
 import { setDialogIsOpen } from 'rmw-shell/lib/store/dialogs/actions';
 import { withRouter } from 'react-router-dom';
-import firebase from 'firebase';
 import FontIcon from 'material-ui/FontIcon';
 import FlatButton from 'material-ui/FlatButton';
 import Dialog from 'material-ui/Dialog';
@@ -16,6 +15,8 @@ import FireForm from 'fireform'
 import { change, submit } from 'redux-form';
 import isGranted from '../../utils/auth';
 import ShipmentForm from "../../components/Forms/ShipmentForm";
+import shipment_contract_artifacts from '../../blockchain/build/contracts/SaveShip'
+import contract from 'truffle-contract';
 
 
 const path = '/shipments/';
@@ -29,13 +30,25 @@ class Shipment extends Component {
     const errors = {}
 
     errors.item_name = !values.item_name ? intl.formatMessage({ id: 'error_required_field' }) : '';
-    // errors.full_name = !values.full_name ? intl.formatMessage({ id: 'error_required_field' }) : '';
-    // errors.vat = !values.vat ? intl.formatMessage({ id: 'error_required_field' }) : '';
+    errors.item_value = !values.item_value ? intl.formatMessage({ id: 'error_required_field' }) : '';
+    errors.recipient_email = !values.recipient_email ? intl.formatMessage({ id: 'error_required_field' }) : '';
 
     return errors
-  }
+  };
 
-  // handleCreateValues(values)
+  handleCreateValues(values) {
+    const SaveShip = contract(shipment_contract_artifacts);
+    SaveShip.setProvider(window.web3.currentProvider);
+    SaveShip.deployed().then((instance) => {
+      return instance.newShipment(2, 1, {
+        from: values.wallet_id,
+        gas: 140000,
+      })
+    }).catch(e => {
+      console.log(e);
+    });
+    return values;
+  }
 
   handleClose = () => {
     const { setDialogIsOpen } = this.props;
@@ -69,9 +82,11 @@ class Shipment extends Component {
       submit,
       muiTheme,
       isGranted,
-      firebaseApp
+      firebaseApp,
+      auth
     } = this.props;
 
+    const userUid = auth.uid;
     const uid = match.params.uid;
 
 
@@ -103,7 +118,7 @@ class Shipment extends Component {
         tooltip: intl.formatMessage({ id: 'delete' }),
         onClick: () => { setDialogIsOpen('delete_shipment', true); }
       }
-    ]
+    ];
 
     return (
       <Activity
@@ -127,6 +142,7 @@ class Shipment extends Component {
             name={'shipment'}
             path={`${path}`}
             validate={this.validate}
+            handleCreateValues={this.handleCreateValues}
             onSubmitSuccess={(values) => { history.push('/shipments'); }}
             onDelete={(values) => { history.push('/shipments'); }}
             uid={match.params.uid}>
@@ -160,11 +176,12 @@ Shipment.propTypes = {
 
 
 const mapStateToProps = (state) => {
-  const { intl, dialogs } = state;
+  const { intl, dialogs, auth } = state;
 
   return {
     intl,
     dialogs,
+    auth,
     isGranted: grant => isGranted(state, grant)
   };
 };
