@@ -39,11 +39,20 @@ class Shipment extends Component {
   handleCreateValues(values) {
     const SaveShip = contract(shipment_contract_artifacts);
     SaveShip.setProvider(window.web3.currentProvider);
+
+    SaveShip.Created({}, function(err, response) {
+      if (err) {
+        console.error('error receiving blockchain event', err);
+      }
+      console.log('response', response);
+      // firebaseApp.firestore().collection(path).doc(uid).update(updateValues)
+    });
+    
     SaveShip.deployed().then((instance) => {
       return instance.newShipment(2, 1, {
         from: values.wallet_id,
         gas: 140000,
-      })
+      });
     }).catch(e => {
       console.log(e);
     });
