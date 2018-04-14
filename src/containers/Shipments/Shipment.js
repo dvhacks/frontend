@@ -24,6 +24,12 @@ const form_name = 'shipment';
 
 
 class Shipment extends Component {
+  constructor(props) {
+    super(props);
+
+    this.handleCreateValues = this.handleCreateValues.bind(this);
+    this.handleCreated = this.handleCreated.bind(this);
+  }
 
   validate = (values) => {
     const { intl } = this.props;
@@ -37,26 +43,37 @@ class Shipment extends Component {
   };
 
   handleCreateValues(values) {
+    const { auth } = this.props;
+    const userUid = auth.uid;
+    const getAccount = window.web3.eth.getAccounts();
     const SaveShip = contract(shipment_contract_artifacts);
     SaveShip.setProvider(window.web3.currentProvider);
 
-    SaveShip.Created({}, function(err, response) {
-      if (err) {
-        console.error('error receiving blockchain event', err);
-      }
-      console.log('response', response);
-      // firebaseApp.firestore().collection(path).doc(uid).update(updateValues)
-    });
-    
+
     SaveShip.deployed().then((instance) => {
-      return instance.newShipment(2, 1, {
-        from: values.wallet_id,
-        gas: 140000,
+
+      instance.Created(this.handleCreated);
+
+      return getAccount.then(payload => {
+        return payload[0];
+      }).then((walletId) => {
+        return instance.newShipment(2, 1, {
+          from: walletId,
+          gas: 140000,
+        })
       });
     }).catch(e => {
       console.log(e);
     });
-    return values;
+
+    return Object.assign({}, values, { user_id: userUid });
+  }
+
+  handleCreated(err, response) {
+    const { firebaseApp } = this.props;
+    const getAccount = window.web3.eth.getAccounts();
+
+    console.log('SUCCESS', err, response);
   }
 
   handleClose = () => {
@@ -91,11 +108,9 @@ class Shipment extends Component {
       submit,
       muiTheme,
       isGranted,
-      firebaseApp,
-      auth
+      firebaseApp
     } = this.props;
 
-    const userUid = auth.uid;
     const uid = match.params.uid;
 
 
