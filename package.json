@@ -4,6 +4,12 @@
   "private": true,
   "devDependencies": {
     "enzyme": "^3.3.0",
+    "eslint": "^4.19.1",
+    "eslint-config-standard": "^11.0.0",
+    "eslint-plugin-import": "^2.11.0",
+    "eslint-plugin-node": "^6.0.1",
+    "eslint-plugin-promise": "^3.7.0",
+    "eslint-plugin-standard": "^3.0.1",
     "react-scripts": "^1.1.4",
     "redux-logger": "^3.0.6",
     "redux-testkit": "^1.0.6",
@@ -67,7 +73,8 @@
     "standard": "standard src/**/*.js ",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "lint": "eslint ."
   },
   "author": "heycar",
   "homepage": "https://bcgdv.com",
