@@ -15,7 +15,7 @@ import { getList, isLoading } from 'firekit'
 
 const path = `roles`;
 
-export class Roles extends Component {
+class Roles extends Component {
 
   componentDidMount() {
     const { watchList } = this.props;
@@ -61,7 +61,7 @@ export class Roles extends Component {
 
   render() {
     const { intl, list, isLoading } = this.props;
-
+console.log('ROLES LIST', list);
 
     return (
       <Activity

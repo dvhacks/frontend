@@ -67,7 +67,6 @@ class AppLayout extends Component {
     const path = history.location.pathname
     const customRoutes = appConfig.routes ? appConfig.routes : []
     const appRoutes = getAppRoutes(appConfig.firebaseLoad)
-    const Header = appConfig.drawerHeader ? appConfig.drawerHeader : DrawerHeader;
 
     return (
 

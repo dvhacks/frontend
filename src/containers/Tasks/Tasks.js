@@ -247,7 +247,7 @@ Tasks.propTypes = {
 
 const mapStateToProps = (state) => {
   const { lists, auth, browser, dialogs } = state;
-
+console.log({lists});
   return {
     tasks: lists.public_tasks,
     auth,

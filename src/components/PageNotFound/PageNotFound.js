@@ -31,7 +31,7 @@ const PageNotFound = ({ muiTheme, intl, appConfig }) => {
   return (
     <Paper zDepth={0} style={styles.paper}>
       <div style={styles.container}>
-        <AppIcon color={muiTheme.palette.primary2Color} style={styles.icon} />
+        {/*<AppIcon color={muiTheme.palette.primary2Color} style={styles.icon} />*/}
         <h3>{intl.formatMessage({ id: 'warning_404_message' })}</h3>
         <p>{intl.formatMessage({ id: 'warning_404_description' })}</p>
         <FloatingActionButton secondary href='/'>
