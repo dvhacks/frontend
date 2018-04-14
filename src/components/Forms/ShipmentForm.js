@@ -11,8 +11,6 @@ import { ImageCropDialog } from 'rmw-shell/lib/containers/ImageCropDialog';
 import { withRouter } from 'react-router-dom';
 import muiThemeable from 'material-ui/styles/muiThemeable';
 import PropTypes from 'prop-types';
-import shipment_contract_artifacts from '../../blockchain/build/contracts/SaveShip'
-import contract from 'truffle-contract';
 
 class ShipmentForm extends Component {
   constructor(props){
@@ -30,18 +28,6 @@ class ShipmentForm extends Component {
   }
 
   handleSubmit() {
-    const SaveShip = contract(shipment_contract_artifacts);
-    console.log({SaveShip});
-    SaveShip.setProvider(window.web3.currentProvider);
-    SaveShip.deployed().then((instance) => {
-      return instance.newShipment(2, 1, {
-        from: this.accountId,
-        gas: 140000,
-      })
-    }).catch(e => {
-      console.log(e);
-    });
-
     this.props.handleSubmit(...arguments);
   }
 
@@ -75,7 +61,6 @@ class ShipmentForm extends Component {
               component={TextField}
               hintText={intl.formatMessage({ id: 'item_name_hint' })}
               floatingLabelText={intl.formatMessage({ id: 'item_name_label' })}
-              ref="item_name"
               withRef
             />
           </div>
@@ -88,6 +73,17 @@ class ShipmentForm extends Component {
               hintText={intl.formatMessage({ id: 'recipient_email_hint' })}
               floatingLabelText={intl.formatMessage({ id: 'recipient_email_label' })}
               ref="recipient_email"
+              withRef
+            />
+          </div>
+
+          <div>
+            <Field
+              name="item_value"
+              disabled={!initialized}
+              component={TextField}
+              hintText={intl.formatMessage({ id: 'item_value_hint' })}
+              floatingLabelText={intl.formatMessage({ id: 'item_value_label' })}
               withRef
             />
           </div>
@@ -107,9 +103,6 @@ class ShipmentForm extends Component {
 
                 return <span />
               }}
-              hintText={intl.formatMessage({ id: 'recipient_email_hint' })}
-              floatingLabelText={intl.formatMessage({ id: 'recipient_email_label' })}
-              ref="recipient_email"
               withRef
             />
           </div>

@@ -1,5 +1,5 @@
-import React, { Component, Fragment } from 'react';
-import { connect } from 'react-redux';
+import React, {Component, Fragment} from 'react';
+import {connect} from 'react-redux';
 import {
   AppBar,
   BottomNavigation,
@@ -10,39 +10,44 @@ import {
   ListItem,
   Paper
 } from 'material-ui';
-import { injectIntl, intlShape } from 'react-intl';
+import {injectIntl, intlShape} from 'react-intl';
+import PropTypes from 'prop-types';
 
 const buttonOptions = {
   backgroundColor: '#00cea5',
   fullWidth: true,
   hoverColor: '#00d9ae',
-  style: { color: '#fff' },
+  style: {color: '#fff', marginTop: 20},
   primary: true
 };
 
 class Dashboard extends Component {
 
-  render () {
+  render() {
+    const {history} = this.props;
+
     return (
       <Fragment>
-        <AppBar title="Grasshoppr" showMenuIconButton={false} />
-        <List>
-          <ListItem>
-            <FlatButton {...buttonOptions}>
-              Seller
-            </FlatButton>
-          </ListItem>
-          <ListItem>
-            <FlatButton {...buttonOptions}>
-              Buyer
-            </FlatButton>
-          </ListItem>
-          <ListItem>
-            <FlatButton {...buttonOptions}>
-              Courier
-            </FlatButton>
-          </ListItem>
-        </List>
+        <AppBar title="Grasshoppr" showMenuIconButton={false}/>
+        <div style={{
+          margin: '10px'
+        }}>
+          <FlatButton
+            {...buttonOptions}
+            onClick={() => {
+              history.push('/shipments/create')
+            }}
+          >
+            Seller
+          </FlatButton>
+          <FlatButton {...buttonOptions}>
+            Buyer
+          </FlatButton>
+
+          <FlatButton {...buttonOptions}>
+            Courier
+          </FlatButton>
+        </div>
         <Paper zDepth={1}>
           <BottomNavigation>
             <BottomNavigationItem
@@ -56,7 +61,8 @@ class Dashboard extends Component {
 }
 
 Dashboard.propTypes = {
-  intl: intlShape.isRequired
+  intl: intlShape.isRequired,
+  history: PropTypes.object.isRequired
 };
 
 const mapStateToProps = (state) => {
