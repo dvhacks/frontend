@@ -1,6 +1,6 @@
 {
-  "name": "react-most-wanted",
-  "version": "0.1.0",
+  "name": "dvhacks",
+  "version": "0.0.1",
   "private": true,
   "devDependencies": {
     "enzyme": "^3.3.0",
@@ -69,12 +69,12 @@
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
   },
-  "author": "Tarik Huber",
-  "homepage": "https://www.react-most-wanted.com/",
+  "author": "heycar",
+  "homepage": "https://bcgdv.com",
   "license": "MIT",
-  "repository": "https://github.com/TarikHuber/react-most-wanted",
+  "repository": "https://github.com/dvhacks/frontend.git",
   "keywords": [
-    "react-most-wanted",
+    "dvhacks",
     "react",
     "redux",
     "firebase"
