@@ -70,7 +70,7 @@ const messages = defineMessages({
   delete_task_title: 'Delete task?',
   delete_task_message: 'The task will be deleted!',
   error: 'Error!',
-  companies: 'Companies',
+  companies: 'Shipments',
   create_company: 'Create company',
   edit_company: 'Edit company',
   delete_company_title: 'Delete company?',

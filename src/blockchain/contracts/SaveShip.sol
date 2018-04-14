@@ -16,9 +16,9 @@ contract SaveShip {
 
     mapping(uint => Shipment) public shipments;
 
-    event Created(uint);
-    event Aborted(uint);
-    event Fulfilled(uint);
+    event Created(uint _id);
+    event Aborted(uint _id);
+    event Fulfilled(uint _id);
 
     /// Create a SaveShip shipment for a cost
     function newShipment(uint _id, uint _cost) public returns(uint) {
