@@ -3,6 +3,6 @@ export const grants = [
   'edit_company',
   'delete_company',
   'read_companies'
-]
+];
 
-export default grants
+export default grants;

@@ -1,2 +1,2 @@
 export { default as Companies } from './Companies';
-export { default as company } from './company'; 
+export { default as company } from './company';

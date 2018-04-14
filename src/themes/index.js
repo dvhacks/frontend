@@ -1,8 +1,8 @@
+import icsTheme from './ics_theme';
 import darkBaseTheme from 'material-ui/styles/baseThemes/darkBaseTheme'
 import lightBaseTheme from 'material-ui/styles/baseThemes/lightBaseTheme'
-import icsTheme from './ics_theme'
 
-const themes = [
+export const allThemes = [
   {
     id: 'light',
     source: lightBaseTheme
@@ -15,6 +15,16 @@ const themes = [
     id: 'ics',
     source: icsTheme
   }
-]
+];
 
-export default themes
+export const getThemeSource = (t, ts) => {
+  if (ts) {
+    for (let i = 0; i < ts.length; i++) {
+      if (ts[i]['id'] === t) {
+        return ts[i]['source']
+      }
+    }
+  }
+
+  return lightBaseTheme // Default theme
+};

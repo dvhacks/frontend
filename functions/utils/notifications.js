@@ -1,31 +1,34 @@
-const admin = require('firebase-admin')
-try { admin.initializeApp() } catch (e) { }
+const admin = require('firebase-admin');
+
+try {
+  admin.initializeApp();
+} catch (e) { }
 
 module.exports = {
   notifyUser: (userUid, payload) => {
-    console.log(userUid, payload)
+    console.log(userUid, payload);
 
     return admin.database().ref(`/notification_tokens/${userUid}`).once('value').then(snapshot => {
-      let registrationTokens = []
+      const registrationTokens = [];
 
       snapshot.forEach(token => {
         if (token.val()) {
-          registrationTokens.push(token.key)
+          registrationTokens.push(token.key);
         }
-      })
+      });
 
       if (registrationTokens.length) {
         return admin.messaging().sendToDevice(registrationTokens, payload)
-          .then(function (response) {
-            console.log('Successfully sent message:', response)
+          .then((response) => {
+            console.log('Successfully sent message:', response);
           })
-          .catch(function (error) {
-            console.log('Error sending message:', error)
-          })
+          .catch((error) => {
+            console.log('Error sending message:', error);
+          });
       } else {
-        console.log('Not tokens registered')
+        console.log('Not tokens registered');
       }
-    })
+    });
   }
 
-}
+};

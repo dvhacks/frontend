@@ -1,19 +1,22 @@
-const functions = require('firebase-functions')
-const admin = require('firebase-admin')
-try { admin.initializeApp() } catch (e) { }
+const functions = require('firebase-functions');
+const admin = require('firebase-admin');
+
+try {
+  admin.initializeApp();
+} catch (e) { }
 
 exports = module.exports = functions.database.ref('/public_chats/{taskUid}').onCreate((eventSnapshot, context) => {
-  const authorName = eventSnapshot.child('authorName').val()
-  const authorPhotoUrl = eventSnapshot.child('authorPhotoUrl').val()
+  const authorName = eventSnapshot.child('authorName').val();
+  const authorPhotoUrl = eventSnapshot.child('authorPhotoUrl').val();
 
   return admin.database().ref(`/notification_tokens`).once('value').then(nTokens => {
-    let registrationTokens = []
+    const registrationTokens = [];
 
     nTokens.forEach(user => {
       user.forEach(token => {
-        registrationTokens.push(token.key)
-      })
-    })
+        registrationTokens.push(token.key);
+      });
+    });
 
     const payload = {
       notification: {
@@ -23,18 +26,18 @@ exports = module.exports = functions.database.ref('/public_chats/{taskUid}').onC
         click_action: 'https://www.react-most-wanted.com/public_chats',
         tag: 'public_chat'
       }
-    }
+    };
 
     if (registrationTokens.length) {
       return admin.messaging().sendToDevice(registrationTokens, payload)
-        .then(function (response) {
-          console.log('Successfully sent message:', response)
+        .then((response) => {
+          console.log('Successfully sent message:', response);
         })
-        .catch(function (error) {
-          console.log('Error sending message:', error)
-        })
+        .catch((error) => {
+          console.log('Error sending message:', error);
+        });
     } else {
-      console.log('Not tokens registered')
+      console.log('Not tokens registered');
     }
-  })
-})
+  });
+});

@@ -1,29 +1,29 @@
 // To run this script use this command
 // node bs.js yourBSUserName yourBSKey
 
-var webdriver = require('selenium-webdriver')
-var test = require('./bs_test.js')
+const webdriver = require('selenium-webdriver');
+const test = require('./bs_test.js');
 
 // Input capabilities
-var iPhone = {
+const iPhone = {
   'browserName': 'iPhone',
   'device': 'iPhone 7',
   'realMobile': 'true',
   'os_version': '10.3',
   'browserstack.user': process.argv[2],
   'browserstack.key': process.argv[3]
-}
+};
 
-var android = {
+const android = {
   'browserName': 'android',
   'device': 'Samsung Galaxy S8',
   'realMobile': 'true',
   'os_version': '7.0',
   'browserstack.user': process.argv[2],
   'browserstack.key': process.argv[3]
-}
+};
 
-var desktopFF = {
+const desktopFF = {
   'browserName': 'Firefox',
   'browser_version': '59.0',
   'os': 'Windows',
@@ -31,9 +31,9 @@ var desktopFF = {
   'resolution': '1024x768',
   'browserstack.user': process.argv[2],
   'browserstack.key': process.argv[3]
-}
+};
 
-var desktopEdge = {
+const desktopEdge = {
   'browserName': 'Edge',
   'browser_version': '16.0',
   'os': 'Windows',
@@ -41,9 +41,9 @@ var desktopEdge = {
   'resolution': '1024x768',
   'browserstack.user': process.argv[2],
   'browserstack.key': process.argv[3]
-}
+};
 
-var desktopIE = {
+const desktopIE = {
   'browserName': 'IE',
   'browser_version': '11.0',
   'os': 'Windows',
@@ -51,35 +51,35 @@ var desktopIE = {
   'resolution': '1024x768',
   'browserstack.user': process.argv[2],
   'browserstack.key': process.argv[3]
-}
+};
 
-var iPhoneDriver = new webdriver.Builder()
+const iPhoneDriver = new webdriver.Builder()
   .usingServer('http://hub-cloud.browserstack.com/wd/hub')
   .withCapabilities(iPhone)
-  .build()
+  .build();
 
-var androidDriver = new webdriver.Builder()
+const androidDriver = new webdriver.Builder()
   .usingServer('http://hub-cloud.browserstack.com/wd/hub')
   .withCapabilities(android)
-  .build()
+  .build();
 
-var desktopFFDriver = new webdriver.Builder()
+const desktopFFDriver = new webdriver.Builder()
   .usingServer('http://hub-cloud.browserstack.com/wd/hub')
   .withCapabilities(desktopFF)
-  .build()
+  .build();
 
-var desktopEdgeDriver = new webdriver.Builder()
+const desktopEdgeDriver = new webdriver.Builder()
   .usingServer('http://hub-cloud.browserstack.com/wd/hub')
   .withCapabilities(desktopEdge)
-  .build()
+  .build();
 
-var desktopIEDriver = new webdriver.Builder()
+const desktopIEDriver = new webdriver.Builder()
   .usingServer('http://hub-cloud.browserstack.com/wd/hub')
   .withCapabilities(desktopIE)
-  .build()
+  .build();
 
-test.runTest(iPhoneDriver)
-test.runTest(androidDriver)
-test.runTest(desktopFFDriver)
-test.runTest(desktopEdgeDriver)
-test.runTest(desktopIEDriver)
+test.runTest(iPhoneDriver);
+test.runTest(androidDriver);
+test.runTest(desktopFFDriver);
+test.runTest(desktopEdgeDriver);
+test.runTest(desktopIEDriver);
