@@ -3,11 +3,7 @@ import { connect } from 'react-redux';
 import { injectIntl, intlShape } from 'react-intl';
 import { Field, reduxForm, formValueSelector } from 'redux-form';
 import { TextField } from 'redux-form-material-ui';
-import { Avatar } from 'rmw-shell/lib/containers/Avatar';
-import FontIcon from 'material-ui/FontIcon';
-import FlatButton from 'material-ui/FlatButton';
 import { setDialogIsOpen } from 'rmw-shell/lib/store/dialogs/actions';
-import { ImageCropDialog } from 'rmw-shell/lib/containers/ImageCropDialog';
 import { withRouter } from 'react-router-dom';
 import muiThemeable from 'material-ui/styles/muiThemeable';
 import PropTypes from 'prop-types';
@@ -18,13 +14,6 @@ class ShipmentForm extends Component {
 
     this.handleSubmit = this.handleSubmit.bind(this);
     this.accountId = null;
-  }
-
-  handlePhotoUploadSuccess (snapshot) {
-    const { setDialogIsOpen, change } = this.props;
-
-    change('photoURL', snapshot.downloadURL);
-    setDialogIsOpen('new_company_photo', undefined);
   }
 
   handleSubmit() {
@@ -132,7 +121,6 @@ const mapStateToProps = state => {
     vehicleTypes,
     users,
     dialogs,
-    // photoURL: selector(state, 'photoURL')
   };
 };
 
