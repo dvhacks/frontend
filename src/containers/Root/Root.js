@@ -117,7 +117,7 @@ class Root extends Component {
     const { locale, muiTheme, messages, appConfig } = this.props;
 
     return (
-      <MuiThemeProvider muiTheme={muiTheme} >
+      <MuiThemeProvider muiTheme={muiTheme}>
         <IntlProvider locale={locale} key={locale} messages={messages}>
           <Router history={history} >
             <Switch>
