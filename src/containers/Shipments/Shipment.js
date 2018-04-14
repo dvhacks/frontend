@@ -7,6 +7,7 @@ import { Activity } from 'rmw-shell'
 import { ResponsiveMenu } from 'material-ui-responsive-menu';
 import { setDialogIsOpen } from 'rmw-shell/lib/store/dialogs/actions';
 import { withRouter } from 'react-router-dom';
+import firebase from 'firebase';
 import FontIcon from 'material-ui/FontIcon';
 import FlatButton from 'material-ui/FlatButton';
 import Dialog from 'material-ui/Dialog';
@@ -15,8 +16,6 @@ import FireForm from 'fireform'
 import { change, submit } from 'redux-form';
 import isGranted from '../../utils/auth';
 import ShipmentForm from "../../components/Forms/ShipmentForm";
-import shipment_contract_artifacts from '../../blockchain/build/contracts/SaveShip'
-import contract from 'truffle-contract';
 
 
 const path = '/shipments/';
@@ -24,57 +23,19 @@ const form_name = 'shipment';
 
 
 class Shipment extends Component {
-  constructor(props) {
-    super(props);
-
-    this.handleCreateValues = this.handleCreateValues.bind(this);
-    this.handleCreated = this.handleCreated.bind(this);
-  }
 
   validate = (values) => {
     const { intl } = this.props;
     const errors = {}
 
     errors.item_name = !values.item_name ? intl.formatMessage({ id: 'error_required_field' }) : '';
-    errors.item_value = !values.item_value ? intl.formatMessage({ id: 'error_required_field' }) : '';
-    errors.recipient_email = !values.recipient_email ? intl.formatMessage({ id: 'error_required_field' }) : '';
+    // errors.full_name = !values.full_name ? intl.formatMessage({ id: 'error_required_field' }) : '';
+    // errors.vat = !values.vat ? intl.formatMessage({ id: 'error_required_field' }) : '';
 
     return errors
-  };
-
-  handleCreateValues(values) {
-    const { auth } = this.props;
-    const userUid = auth.uid;
-    const getAccount = window.web3.eth.getAccounts();
-    const SaveShip = contract(shipment_contract_artifacts);
-    SaveShip.setProvider(window.web3.currentProvider);
-
-
-    SaveShip.deployed().then((instance) => {
-
-      instance.Created(this.handleCreated);
-
-      return getAccount.then(payload => {
-        return payload[0];
-      }).then((walletId) => {
-        return instance.newShipment(2, 1, {
-          from: walletId,
-          gas: 140000,
-        })
-      });
-    }).catch(e => {
-      console.log(e);
-    });
-
-    return Object.assign({}, values, { user_id: userUid });
   }
 
-  handleCreated(err, response) {
-    const { firebaseApp } = this.props;
-    const getAccount = window.web3.eth.getAccounts();
-
-    console.log('SUCCESS', err, response);
-  }
+  // handleCreateValues(values)
 
   handleClose = () => {
     const { setDialogIsOpen } = this.props;
@@ -142,7 +103,7 @@ class Shipment extends Component {
         tooltip: intl.formatMessage({ id: 'delete' }),
         onClick: () => { setDialogIsOpen('delete_shipment', true); }
       }
-    ];
+    ]
 
     return (
       <Activity
@@ -166,7 +127,6 @@ class Shipment extends Component {
             name={'shipment'}
             path={`${path}`}
             validate={this.validate}
-            handleCreateValues={this.handleCreateValues}
             onSubmitSuccess={(values) => { history.push('/shipments'); }}
             onDelete={(values) => { history.push('/shipments'); }}
             uid={match.params.uid}>
@@ -200,12 +160,11 @@ Shipment.propTypes = {
 
 
 const mapStateToProps = (state) => {
-  const { intl, dialogs, auth } = state;
+  const { intl, dialogs } = state;
 
   return {
     intl,
     dialogs,
-    auth,
     isGranted: grant => isGranted(state, grant)
   };
 };

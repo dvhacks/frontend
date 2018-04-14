@@ -3,10 +3,16 @@ import { connect } from 'react-redux';
 import { injectIntl, intlShape } from 'react-intl';
 import { Field, reduxForm, formValueSelector } from 'redux-form';
 import { TextField } from 'redux-form-material-ui';
+import { Avatar } from 'rmw-shell/lib/containers/Avatar';
+import FontIcon from 'material-ui/FontIcon';
+import FlatButton from 'material-ui/FlatButton';
 import { setDialogIsOpen } from 'rmw-shell/lib/store/dialogs/actions';
+import { ImageCropDialog } from 'rmw-shell/lib/containers/ImageCropDialog';
 import { withRouter } from 'react-router-dom';
 import muiThemeable from 'material-ui/styles/muiThemeable';
 import PropTypes from 'prop-types';
+import shipment_contract_artifacts from '../../blockchain/build/contracts/SaveShip'
+import contract from 'truffle-contract';
 
 class ShipmentForm extends Component {
   constructor(props){
@@ -16,7 +22,26 @@ class ShipmentForm extends Component {
     this.accountId = null;
   }
 
+  handlePhotoUploadSuccess (snapshot) {
+    const { setDialogIsOpen, change } = this.props;
+
+    change('photoURL', snapshot.downloadURL);
+    setDialogIsOpen('new_company_photo', undefined);
+  }
+
   handleSubmit() {
+    const SaveShip = contract(shipment_contract_artifacts);
+    console.log({SaveShip});
+    SaveShip.setProvider(window.web3.currentProvider);
+    SaveShip.deployed().then((instance) => {
+      return instance.newShipment(2, 1, {
+        from: this.accountId,
+        gas: 140000,
+      })
+    }).catch(e => {
+      console.log(e);
+    });
+
     this.props.handleSubmit(...arguments);
   }
 
@@ -50,6 +75,7 @@ class ShipmentForm extends Component {
               component={TextField}
               hintText={intl.formatMessage({ id: 'item_name_hint' })}
               floatingLabelText={intl.formatMessage({ id: 'item_name_label' })}
+              ref="item_name"
               withRef
             />
           </div>
@@ -62,17 +88,6 @@ class ShipmentForm extends Component {
               hintText={intl.formatMessage({ id: 'recipient_email_hint' })}
               floatingLabelText={intl.formatMessage({ id: 'recipient_email_label' })}
               ref="recipient_email"
-              withRef
-            />
-          </div>
-
-          <div>
-            <Field
-              name="item_value"
-              disabled={!initialized}
-              component={TextField}
-              hintText={intl.formatMessage({ id: 'item_value_hint' })}
-              floatingLabelText={intl.formatMessage({ id: 'item_value_label' })}
               withRef
             />
           </div>
@@ -92,6 +107,9 @@ class ShipmentForm extends Component {
 
                 return <span />
               }}
+              hintText={intl.formatMessage({ id: 'recipient_email_hint' })}
+              floatingLabelText={intl.formatMessage({ id: 'recipient_email_label' })}
+              ref="recipient_email"
               withRef
             />
           </div>
@@ -121,6 +139,7 @@ const mapStateToProps = state => {
     vehicleTypes,
     users,
     dialogs,
+    // photoURL: selector(state, 'photoURL')
   };
 };
 
