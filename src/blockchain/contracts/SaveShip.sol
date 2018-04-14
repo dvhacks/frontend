@@ -18,6 +18,7 @@ contract SaveShip {
 
   event Created(uint _id);
   event RecipientEntered(uint _id);
+  event CourrierEntered(uint _id);
   event Aborted(uint _id);
   event Fulfilled(uint _id);
 
@@ -55,6 +56,8 @@ contract SaveShip {
 
     shipments[_id].courrier = msg.sender;
     shipments[_id].state = State.InProgress;
+    
+    emit CourrierEntered(_id);
   }
 
   function abort(uint _id) public {
