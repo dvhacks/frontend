@@ -90,20 +90,6 @@ const MenuItemShape = PropTypes.shape({
   label: PropTypes.string.isRequired
 });
 
-// const items = [
-//   { id: 'item-1', label: 'Fridge' },
-//   { id: 'item-2', label: 'Car' },
-//   { id: 'item-3', label: 'Hot Dogs (100)' },
-//   { id: 'item-4', label: 'Magnets' },
-//   { id: 'item-5', label: 'Clock Radio' }
-// ];
-// const couriers = [
-//   { id: 'sender-1', label: 'Alexander Reichert' },
-//   { id: 'sender-2', label: 'Dejan Eremić' },
-//   { id: 'sender-3', label: 'Jakub Horák' },
-//   { id: 'sender-4', label: 'Matt Finucane' }
-// ];
-
 Buyer.propTypes = {
   intl: intlShape.isRequired,
   items: PropTypes.arrayOf(MenuItemShape),
