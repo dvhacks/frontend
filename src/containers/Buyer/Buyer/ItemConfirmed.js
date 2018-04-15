@@ -6,6 +6,7 @@ import { intlShape } from 'react-intl';
 import PropTypes from 'prop-types';
 import { Map } from '../../../components/Map/Map';
 import { PickupPoint } from '../../../components/Map/PickupPoint';
+import { haversineDistance } from '../../../utils/googleMaps';
 
 export class ItemConfirmed extends Component {
   constructor(props) {
@@ -15,7 +16,11 @@ export class ItemConfirmed extends Component {
   }
   
   onPickupPointClick(e) {
-    console.log({ e });
+    const start = { lat: 33.900612, lng: -118.392683 };
+    const end = { lat: 34.042941, lng: -118.241591 };
+    const distance = haversineDistance(start, end);
+    
+    console.log({ distance });
   }
   
   render() {
