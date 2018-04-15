@@ -1,6 +1,6 @@
 pragma solidity ^0.4.21;
-// We have to specify what version of compiler this code will compile with
 
+// SaveShip is a singleton contract holding information about the shipments
 contract SaveShip {
 
   enum State {Created, Pending, InProgress, Fulfilled, Rejected}
@@ -22,15 +22,13 @@ contract SaveShip {
   event Aborted(uint _id);
   event Fulfilled(uint _id);
 
-  /// Create a SaveShip shipment for a cost
+  /// Create a shipment of a package that has a specified cost
   function newShipment(uint _id, uint _cost) public returns (uint) {
     shipments[_id] = Shipment({
       id : _id,
       sender : msg.sender,
-      // temporary placeholder
-      recipient : msg.sender,
-      // temporary placeholder
-      courrier : msg.sender,
+      recipient : address(0),
+      courrier : address(0),
       cost : _cost,
       state : State.Created
       });

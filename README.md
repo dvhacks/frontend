@@ -67,9 +67,14 @@ npm install
 
     node_modules/.bin/ganache-cli -p 7545
 
+  Save the mnemonic phrase for later step.
+
 1. Deploy the contract
 
     truffle migrate
+
+1. Open the Metamask extension and import the account using the mnemonic phrase from previous step. This gives
+   you ETH to spend.
 
 1. After that, go back to the the project root folder and install base NPM dependendencies by running:
 
