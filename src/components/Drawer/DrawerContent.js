@@ -13,7 +13,7 @@ export const DrawerContent = (props, context) => {
     intl,
     match,
     messaging
-  } = props
+  } = props;
 
   const handleChange = (event, index) => {
     const { history, responsiveDrawer, setDrawerOpen } = props
@@ -25,20 +25,20 @@ export const DrawerContent = (props, context) => {
     if (index !== undefined && index !== Object(index)) {
       history.push(index)
     }
-  }
+  };
 
-  const menuItems = appConfig.getMenuItems(props)
+  const menuItems = appConfig.getMenuItems(props);
 
   const handleSignOut = () => {
-    const { userLogout, setDialogIsOpen, appConfig, setDrawerOpen } = props
+    const { userLogout, setDialogIsOpen, appConfig, setDrawerOpen } = props;
 
     appConfig.firebaseLoad().then(({ firebaseApp }) => {
-      firebaseApp.database().ref(`users/${firebaseApp.auth().currentUser.uid}/connections`).remove()
-      firebaseApp.database().ref(`users/${firebaseApp.auth().currentUser.uid}/notificationTokens/${messaging.token}`).remove()
-      firebaseApp.database().ref(`users/${firebaseApp.auth().currentUser.uid}/lastOnline`).set(new Date())
+      firebaseApp.database().ref(`users/${firebaseApp.auth().currentUser.uid}/connections`).remove();
+      firebaseApp.database().ref(`users/${firebaseApp.auth().currentUser.uid}/notificationTokens/${messaging.token}`).remove();
+      firebaseApp.database().ref(`users/${firebaseApp.auth().currentUser.uid}/lastOnline`).set(new Date());
       firebaseApp.auth().signOut().then(() => {
-        userLogout()
-        setDrawerOpen(false)
+        userLogout();
+        setDrawerOpen(false);
         setDialogIsOpen('auth_menu', false)
       })
     })
@@ -56,8 +56,7 @@ export const DrawerContent = (props, context) => {
       primaryText: intl.formatMessage({ id: 'sign_out' }),
       leftIcon: <FontIcon className='material-icons' >lock</FontIcon>
     }
-
-  ]
+  ];
 
   return (
     <div style={{

@@ -28,10 +28,9 @@ class Root extends Component {
     let lastOnlineRef = firebaseApp.database().ref(`users/${user.uid}/lastOnline`);
     lastOnlineRef.onDisconnect().set(new Date());
 
-    let con = myConnectionsRef.push(true)
+    let con = myConnectionsRef.push(true);
     con.onDisconnect().remove();
-
-  }
+  };
 
   onAuthStateChanged = (user, firebaseApp) => {
     const {
@@ -95,8 +94,7 @@ class Root extends Component {
     } else {
       return null;
     }
-
-  }
+  };
 
   componentWillMount() {
     const { watchAuth, appConfig } = this.props;
@@ -140,10 +138,10 @@ Root.propTypes = {
 
 const mapStateToProps = (state, ownProps) => {
   const { theme, locale } = state;
-  const { appConfig } = ownProps
+  const { appConfig } = ownProps;
 
-  const source = getThemeSource(theme, appConfig.themes);
-  const messages = { ...(getLocaleMessages(locale, locales)), ...(getLocaleMessages(locale, appConfig.locales)) }
+  const source = getThemeSource(theme, appConfig.allThemes);
+  const messages = { ...(getLocaleMessages(locale, locales)), ...(getLocaleMessages(locale, appConfig.locales)) };
   const muiTheme = getMuiTheme(source);
 
   return {

@@ -10,7 +10,7 @@ export const LoadingComponent = (props) => {
       // Display a loading screen after a set delay. <img src="/logo.svg" className="loader" alt="logo" />
       return <div className='shell'>
         <div className='container'>
-          <img src='/logo.svg' className='loader' alt='logo' />
+          <img src='/grasshoppr_logo_transparent.png' className='loader' alt='logo' />
         </div>
       </div>
     } else {
@@ -18,7 +18,6 @@ export const LoadingComponent = (props) => {
       return null
     }
   } else if (props.error) {
-    console.warn(props.error)
 
     // Reload page on first failed load
     if (window.location.href.indexOf('isReload') === -1) {
