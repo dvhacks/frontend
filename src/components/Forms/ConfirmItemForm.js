@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { injectIntl, intlShape } from 'react-intl';
-import { Field, reduxForm, formValueSelector } from 'redux-form';
+import { Field, reduxForm } from 'redux-form';
 import { TextField, Checkbox } from 'redux-form-material-ui';
 import { setDialogIsOpen } from 'rmw-shell/lib/store/dialogs/actions';
 import { withRouter } from 'react-router-dom';

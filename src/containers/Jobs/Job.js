@@ -3,31 +3,29 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { injectIntl, intlShape } from 'react-intl';
 import muiThemeable from 'material-ui/styles/muiThemeable';
-import { Activity } from 'rmw-shell'
+import { Activity } from 'rmw-shell';
 import { ResponsiveMenu } from 'material-ui-responsive-menu';
 import { withRouter } from 'react-router-dom';
 import FontIcon from 'material-ui/FontIcon';
 import FlatButton from 'material-ui/FlatButton';
 import Dialog from 'material-ui/Dialog';
-import { withFirebase } from 'firekit-provider'
-import FireForm from 'fireform'
+import { withFirebase } from 'firekit-provider';
 import { change, submit } from 'redux-form';
 import isGranted from '../../utils/auth';
-import shipment_contract_artifacts from '../../blockchain/build/contracts/SaveShip'
+import shipment_contract_artifacts from '../../blockchain/build/contracts/SaveShip';
 import contract from 'truffle-contract';
-import { setDialogIsOpen } from "../../store/dialogs/actions";
-import {CircularProgress} from "material-ui";
-
+import { setDialogIsOpen } from '../../store/dialogs/actions';
+import {CircularProgress} from 'material-ui';
 
 const path = '/shipments/';
 const form_name = 'shipment';
-
 
 class Job extends Component {
   constructor(props) {
     super(props);
 
     this.handleCreateValues = this.handleCreateValues.bind(this);
+    this.handleCreated = this.handleCreated.bind(this);
     this.handleSubmitSuccess = this.handleSubmitSuccess.bind(this);
 
     this.state = {
@@ -44,7 +42,6 @@ class Job extends Component {
 
     firebaseApp.database().ref(`${path}${uid}`).once('value',
       snapshot => {
-        debugger;
         this.setState({
           isLoading: false,
           snapshot: snapshot.val()
@@ -65,22 +62,34 @@ class Job extends Component {
     const SaveShip = contract(shipment_contract_artifacts);
     SaveShip.setProvider(window.web3.currentProvider);
     setDialogIsOpen('processing_shipment', true);
+    const { item_value, id } = this.state.snapshot;
 
     SaveShip.deployed().then((instance) => {
-
-      instance.Created(this.handleUpdated);
+      instance.CourrierEntered(this.handleCreated);
 
       return getAccount.then(payload => {
-        return payload[0];
+        return payload[0]
       }).then((walletId) => {
-        return instance.newJob(2, 1, {
+        return instance.enterCourrier(id, {
           from: walletId,
           gas: 140000,
+          value: parseInt(item_value, 10)
         })
-      });
+      })
     }).catch(e => {
       console.log(e);
-    });
+    })
+  }
+
+  handleCreated(err, response) {
+    const { history, setDialogIsOpen } = this.props;
+    if (this.createdEventHack === 0) {
+      this.createdEventHack += 1;
+    } else {
+      setDialogIsOpen('processing_shipment', false);
+      this.createdEventHack = 0;
+      history.push('/shipments');
+    }
   }
 
   render() {
@@ -88,49 +97,25 @@ class Job extends Component {
     const {
       history,
       intl,
-      setDialogIsOpen,
       dialogs,
       match,
       submit,
       muiTheme,
-      isGranted,
-      firebaseApp
+      isGranted
     } = this.props;
 
     const {
       item_name,
       item_value,
     } = this.state.snapshot;
-console.log(this.state.snapshot);
     const uid = match.params.uid;
-
-    const actions = [
-      <FlatButton
-        label={intl.formatMessage({ id: 'cancel' })}
-        primary={true}
-        onClick={this.handleClose}
-      />,
-      <FlatButton
-        label={intl.formatMessage({ id: 'delete' })}
-        secondary={true}
-        onClick={this.handleDelete}
-      />,
-    ];
-
     const menuList = [
       {
         hidden: (uid === undefined && !isGranted(`create_${form_name}`)) || (uid !== undefined && !isGranted(`edit_${form_name}`)),
         text: intl.formatMessage({ id: 'save' }),
-        icon: <FontIcon className="material-icons" color={muiTheme.palette.canvasColor}>save</FontIcon>,
+        icon: <FontIcon className='material-icons' color={muiTheme.palette.canvasColor}>save</FontIcon>,
         tooltip: intl.formatMessage({ id: 'save' }),
         onClick: () => { submit('shipment') }
-      },
-      {
-        hidden: uid === undefined || !isGranted(`delete_${form_name}`),
-        text: intl.formatMessage({ id: 'delete' }),
-        icon: <FontIcon className="material-icons" color={muiTheme.palette.canvasColor}>delete</FontIcon>,
-        tooltip: intl.formatMessage({ id: 'delete' }),
-        onClick: () => { setDialogIsOpen('delete_shipment', true); }
       }
     ];
 
@@ -148,7 +133,7 @@ console.log(this.state.snapshot);
 
         onBackClick={() => { history.goBack() }}
         title={intl.formatMessage({
-          id:'job_title',
+          id: 'job_title',
           defaultMessage: 'Jobdetails'
         })}>
 
@@ -157,11 +142,16 @@ console.log(this.state.snapshot);
             justifyContent: 'space-around'
           }}>
             <div>
-              {item_name}
+              Item name: {item_name}
             </div>
             <div>
-              5
+              Cost of the item: {item_value}
             </div>
+            <FlatButton
+              label='Accept job'
+              primary
+              onClick={this.handleSubmitSuccess}
+            />,
           </div>
 
         </div>
@@ -194,7 +184,7 @@ Job.propTypes = {
   match: PropTypes.object.isRequired,
   submit: PropTypes.func.isRequired,
   muiTheme: PropTypes.object.isRequired,
-  isGranted: PropTypes.func.isRequired,
+  isGranted: PropTypes.func.isRequired
 };
 
 
@@ -206,9 +196,9 @@ const mapStateToProps = (state) => {
     dialogs,
     auth,
     isGranted: grant => isGranted(state, grant)
-  };
+  }
 };
 
 export default connect(
   mapStateToProps, { setDialogIsOpen, change, submit }
-)(injectIntl(withRouter(withFirebase(muiThemeable()(Job)))));
+)(injectIntl(withRouter(withFirebase(muiThemeable()(Job)))))

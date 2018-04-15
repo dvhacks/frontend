@@ -1,15 +1,15 @@
-import Avatar from 'material-ui/Avatar'
-import FontIcon from 'material-ui/FontIcon'
-import IconButton from 'material-ui/IconButton'
-import List from 'material-ui/List/List'
-import ListItem from 'material-ui/List/ListItem'
-import Paper from 'material-ui/Paper'
-import React from 'react'
-import muiThemeable from 'material-ui/styles/muiThemeable'
-import withAppConfigs from '../../withAppConfigs'
-import { injectIntl } from 'react-intl'
+import Avatar from 'material-ui/Avatar';
+import FontIcon from 'material-ui/FontIcon';
+import IconButton from 'material-ui/IconButton';
+import List from 'material-ui/List/List';
+import ListItem from 'material-ui/List/ListItem';
+import Paper from 'material-ui/Paper';
+import React from 'react';
+import muiThemeable from 'material-ui/styles/muiThemeable';
+import withAppConfigs from '../../withAppConfigs';
+import { injectIntl } from 'react-intl';
 
-export const DrawerHeader = ({ muiTheme, intl, auth, setAuthMenuOpen, fetchUser, dialogs, setDialogIsOpen, appConfig }) => {
+export const DrawerHeader = ({ muiTheme, intl, auth, setAuthMenuOpen, fetchUser, dialogs, setDialogIsOpen }) => {
   const styles = {
     header: {
       padding: 5
@@ -28,9 +28,8 @@ export const DrawerHeader = ({ muiTheme, intl, auth, setAuthMenuOpen, fetchUser,
       height: 48,
       top: 4
     }
-  }
-  const AppIcon = appConfig.appIcon;
-  console.log('rendering', Paper);
+  };
+
   return (
     <Paper zDepth={1} style={styles.paper}>
       {auth.isAuthorised &&
@@ -68,6 +67,6 @@ export const DrawerHeader = ({ muiTheme, intl, auth, setAuthMenuOpen, fetchUser,
       }
     </Paper>
   )
-}
+};
 
 export default injectIntl(muiThemeable()(withAppConfigs(DrawerHeader)))

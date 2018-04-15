@@ -23,11 +23,9 @@ const styles = {
     width: 192,
     height: 192
   }
-}
+};
 
 const PageNotFound = ({ muiTheme, intl, appConfig }) => {
-  const AppIcon = appConfig.appIcon
-
   return (
     <Paper zDepth={0} style={styles.paper}>
       <div style={styles.container}>
@@ -40,6 +38,6 @@ const PageNotFound = ({ muiTheme, intl, appConfig }) => {
       </div>
     </Paper>
   )
-}
+};
 
-export default injectIntl(muiThemeable()(withAppConfigs(PageNotFound)))
+export default injectIntl(muiThemeable()(withAppConfigs(PageNotFound)));

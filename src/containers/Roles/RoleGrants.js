@@ -13,16 +13,16 @@ import Avatar from 'material-ui/Avatar';
 import Toggle from 'material-ui/Toggle';
 import ReactList from 'react-list';
 import { List } from 'material-ui/List';
-import { FilterDrawer, filterSelectors, filterActions } from 'material-ui-filter'
-import withAppConfigs from '../../withAppConfigs'
-import { getList } from 'firekit'
+import { FilterDrawer, filterSelectors, filterActions } from 'material-ui-filter';
+import withAppConfigs from '../../withAppConfigs';
+import { getList } from 'firekit';
 
 export class RoleGrants extends Component {
 
 	componentWillMount() {
 		const { watchList, setSearch } = this.props;
-		watchList('role_grants')
-		setSearch('role_grants', '')
+		watchList('role_grants');
+		setSearch('role_grants', '');
 	}
 
 	handleGrantToggleChange = (e, isInputChecked, key) => {
@@ -34,61 +34,61 @@ export class RoleGrants extends Component {
 		} else {
 			firebaseApp.database().ref(`/role_grants/${uid}/${key}`).remove();
 		}
-
-	}
+	};
 
 	renderGrantItem = (list, i, k) => {
-		const { user_grants, match, intl, appConfig } = this.props
-
-		const uid = match.params.uid
-		const key = list[i].key
-		const val = appConfig.grants[list[i].key]
-		let userGrants = []
+		const { user_grants, match, intl, appConfig } = this.props;
+		const uid = match.params.uid;
+		const key = list[i].key;
+		const val = appConfig.grants[list[i].key];
+		let userGrants = [];
 
 		if (user_grants !== undefined) {
 			user_grants.map(role => {
 				if (role.key === uid) {
 					if (role.val !== undefined) {
-						userGrants = role.val
+						userGrants = role.val;
 					}
 				}
-				return role
+				return role;
 			})
 		}
 
-		return <div key={key}>
-			<ListItem
-				leftAvatar={
-					<Avatar
-						alt="person"
-						src={undefined}
-						icon={<FontIcon className="material-icons" >checked</FontIcon>}
-					/>
-				}
-				rightToggle={
-					<Toggle
-						toggled={userGrants[val] === true}
-						onToggle={(e, isInputChecked) => { this.handleGrantToggleChange(e, isInputChecked, val) }}
-					/>
-				}
-				key={key}
-				id={key}
-				primaryText={intl.formatMessage({ id: `grant_${val}` })}
-				secondaryText={val}
-			/>
-			<Divider inset={true} />
-		</div>;
-	}
+		return (
+		  <div key={key}>
+			  <ListItem
+          leftAvatar={
+            <Avatar
+              alt="person"
+              src={undefined}
+              icon={<FontIcon className="material-icons" >checked</FontIcon>}
+            />
+          }
+          rightToggle={
+            <Toggle
+              toggled={userGrants[val] === true}
+              onToggle={(e, isInputChecked) => { this.handleGrantToggleChange(e, isInputChecked, val) }}
+            />
+          }
+          key={key}
+          id={key}
+          primaryText={intl.formatMessage({ id: `grant_${val}` })}
+          secondaryText={val}
+        />
+			  <Divider inset={true} />
+		  </div>
+    );
+	};
 
 	render() {
 		const { intl, filters, appConfig } = this.props;
 
-		let grantList = []
+		let grantList = [];
 		appConfig.grants.forEach((grant, index) => {
 			grantList.push({ key: index, val: { name: intl.formatMessage({ id: `grant_${grant}` }), value: grant } })
-		})
+		});
 
-		const list = filterSelectors.getFilteredList('role_grants', filters, grantList, fieldValue => fieldValue.val)
+		const list = filterSelectors.getFilteredList('role_grants', filters, grantList, fieldValue => fieldValue.val);
 
 		const filterFields = [
 			{
@@ -99,7 +99,7 @@ export class RoleGrants extends Component {
 				name: 'value',
 				label: intl.formatMessage({ id: 'value_label' })
 			}
-		]
+		];
 
 		return (
 			<div style={{ height: '100%' }}>
@@ -129,10 +129,10 @@ RoleGrants.propTypes = {
 
 
 const mapStateToProps = (state, ownProps) => {
-	const { auth, intl, lists, filters } = state;
-	const { match } = ownProps
+	const { auth, intl, filters } = state;
+	const { match } = ownProps;
 
-	const uid = match.params.uid
+	const uid = match.params.uid;
 
 	return {
 		filters,
@@ -141,7 +141,7 @@ const mapStateToProps = (state, ownProps) => {
 		intl,
 		user_grants: getList(state, 'role_grants')
 	}
-}
+};
 
 export default connect(
 	mapStateToProps, { setSimpleValue, ...filterActions }

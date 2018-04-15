@@ -6,29 +6,29 @@ import {getThemeSource} from '../../themes'
 import getMuiTheme from 'material-ui/styles/getMuiTheme'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import { IntlProvider } from 'react-intl'
-import AppLayout from '../../containers/AppLayout'
+import AppLayout from '../../containers/AppLayout';
 import {
   watchAuth,
   clearInitialization,
   initConnection,
   watchList,
   watchPath
-} from 'firekit'
-import createHistory from 'history/createBrowserHistory'
-import { Router, Route, Switch } from 'react-router-dom'
+} from 'firekit';
+import createHistory from 'history/createBrowserHistory';
+import { Router, Route, Switch } from 'react-router-dom';
 
 const history = createHistory();
 
 class Root extends Component {
 
   handlePresence = (user, firebaseApp) => {
+    const myConnectionsRef = firebaseApp.database().ref(`users/${user.uid}/connections`);
+    const lastOnlineRef = firebaseApp.database().ref(`users/${user.uid}/lastOnline`);
 
-    let myConnectionsRef = firebaseApp.database().ref(`users/${user.uid}/connections`);
-
-    let lastOnlineRef = firebaseApp.database().ref(`users/${user.uid}/lastOnline`);
     lastOnlineRef.onDisconnect().set(new Date());
 
-    let con = myConnectionsRef.push(true);
+    const con = myConnectionsRef.push(true);
+
     con.onDisconnect().remove();
   };
 
@@ -40,12 +40,10 @@ class Root extends Component {
       watchPath,
       appConfig
     } = this.props;
-
-
+    
     clearInitialization();
 
     if (user) {
-
       this.handlePresence(user, firebaseApp);
       setTimeout(() => { watchConnection(firebaseApp); }, 1000);
 
@@ -56,10 +54,10 @@ class Root extends Component {
         emailVerified: user.emailVerified,
         isAnonymous: user.isAnonymous,
         uid: user.uid,
-        providerData: user.providerData,
+        providerData: user.providerData
       };
 
-      let publicProviderData = []
+      let publicProviderData = [];
 
       user.providerData.forEach(provider => {
         publicProviderData.push({
@@ -90,10 +88,9 @@ class Root extends Component {
       firebaseApp.database().ref(`users/${user.uid}`).update(publicUserData);
 
       return userData;
-
-    } else {
-      return null;
     }
+    
+    return null;
   };
 
   componentWillMount() {
@@ -101,9 +98,7 @@ class Root extends Component {
 
     appConfig.firebaseLoad().then(({ firebaseApp }) => {
       watchAuth(firebaseApp, (user) => this.onAuthStateChanged(user, firebaseApp))
-    })
-
-
+    });
   }
 
   componentWillUnmount() {
@@ -112,7 +107,7 @@ class Root extends Component {
   }
 
   render() {
-    const { locale, muiTheme, messages, appConfig } = this.props;
+    const { locale, muiTheme, messages } = this.props;
 
     return (
       <MuiThemeProvider muiTheme={muiTheme}>
@@ -139,7 +134,6 @@ Root.propTypes = {
 const mapStateToProps = (state, ownProps) => {
   const { theme, locale } = state;
   const { appConfig } = ownProps;
-
   const source = getThemeSource(theme, appConfig.allThemes);
   const messages = { ...(getLocaleMessages(locale, locales)), ...(getLocaleMessages(locale, appConfig.locales)) };
   const muiTheme = getMuiTheme(source);

@@ -1,31 +1,31 @@
-import React, { Component } from 'react'
-import { connect } from 'react-redux'
-import PropTypes from 'prop-types'
-import muiThemeable from 'material-ui/styles/muiThemeable'
-import { injectIntl, intlShape } from 'react-intl'
-import { List, ListItem } from 'material-ui/List'
-import Divider from 'material-ui/Divider'
-import Avatar from 'material-ui/Avatar'
-import FontIcon from 'material-ui/FontIcon'
-import { withRouter } from 'react-router-dom'
-import { withFirebase } from 'firekit-provider'
-import ReactList from 'react-list'
-import { FilterDrawer, filterSelectors, filterActions } from 'material-ui-filter'
-import { GoogleIcon, FacebookIcon, GitHubIcon, TwitterIcon } from '../../components/Icons'
-import Activity from '../../containers/Activity'
-import Scrollbar from '../../components/Scrollbar'
-import SearchField from '../../containers/SearchField'
-import { ResponsiveMenu } from 'material-ui-responsive-menu'
-import { getList, isLoading } from 'firekit'
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+import muiThemeable from 'material-ui/styles/muiThemeable';
+import { injectIntl, intlShape } from 'react-intl';
+import { List, ListItem } from 'material-ui/List';
+import Divider from 'material-ui/Divider';
+import Avatar from 'material-ui/Avatar';
+import FontIcon from 'material-ui/FontIcon';
+import { withRouter } from 'react-router-dom';
+import { withFirebase } from 'firekit-provider';
+import ReactList from 'react-list';
+import { FilterDrawer, filterSelectors, filterActions } from 'material-ui-filter';
+import { GoogleIcon, FacebookIcon, GitHubIcon, TwitterIcon } from '../../components/Icons';
+import Activity from '../../containers/Activity';
+import Scrollbar from '../../components/Scrollbar';
+import SearchField from '../../containers/SearchField';
+import { ResponsiveMenu } from 'material-ui-responsive-menu';
+import { getList, isLoading } from 'firekit';
 
-const path = `users`
+const path = 'users';
 
 export class Users extends Component {
 
   componentDidMount() {
     const { watchList } = this.props;
 
-    watchList(path)
+    watchList(path);
   }
 
   getProviderIcon = (provider) => {
@@ -34,41 +34,41 @@ export class Users extends Component {
 
     switch (provider.providerId) {
       case 'google.com':
-        return <GoogleIcon color={color} />
+        return <GoogleIcon color={color} />;
       case 'facebook.com':
-        return <FacebookIcon color={color} />
+        return <FacebookIcon color={color} />;
       case 'twitter.com':
-        return <TwitterIcon color={color} />
+        return <TwitterIcon color={color} />;
       case 'github.com':
-        return <GitHubIcon color={color} />
+        return <GitHubIcon color={color} />;
       case 'phone':
-        return <FontIcon className="material-icons" color={color} >phone</FontIcon>
+        return <FontIcon className="material-icons" color={color} >phone</FontIcon>;
       case 'password':
-        return <FontIcon className="material-icons" color={color} >email</FontIcon>
+        return <FontIcon className="material-icons" color={color} >email</FontIcon>;
       default:
-        return undefined
+        return;
     }
-  }
+  };
 
   handleRowClick = (user) => {
-    const { history, isSelecting } = this.props
+    const { history, isSelecting } = this.props;
     history.push(isSelecting ? `/${isSelecting}/${user.key}` : `/${path}/edit/${user.key}/profile`)
-  }
+  };
 
 
   renderItem = (index, key) => {
-    const { list, intl, muiTheme } = this.props
-    const user = list[index].val
+    const { list, intl, muiTheme } = this.props;
+    const user = list[index].val;
 
-    return <div key={key}>
-      <ListItem
-        key={key}
-        id={key}
-        onClick={() => { this.handleRowClick(list[index]) }}
-        leftAvatar={<Avatar style={{ marginTop: 10 }} src={user.photoURL} alt="person" icon={<FontIcon className="material-icons" >person</FontIcon>} />}
-        rightIcon={<FontIcon style={{ marginTop: 22 }} className="material-icons" color={user.connections ? muiTheme.palette.primary1Color : muiTheme.palette.disabledColor}>offline_pin</FontIcon>}>
-
-        <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'stretch' }}>
+    return (
+      <div key={key}>
+        <ListItem
+          key={key}
+          id={key}
+          onClick={() => { this.handleRowClick(list[index]) }}
+          leftAvatar={<Avatar style={{ marginTop: 10 }} src={user.photoURL} alt="person" icon={<FontIcon className="material-icons" >person</FontIcon>} />}
+          rightIcon={<FontIcon style={{ marginTop: 22 }} className="material-icons" color={user.connections ? muiTheme.palette.primary1Color : muiTheme.palette.disabledColor}>offline_pin</FontIcon>}>
+          <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'stretch' }}>
           <div style={{ display: 'flex', flexDirection: 'column', width: 120 }}>
             <div>
               {user.displayName}
@@ -100,22 +100,21 @@ export class Users extends Component {
             }
           </div>
         </div>
-
-      </ListItem>
+        </ListItem>
       <Divider inset={true} />
     </div>
-  }
+    )
+  };
 
   render() {
     const {
       list,
       muiTheme,
-      setSearch,
       intl,
       setFilterIsOpen,
       hasFilters,
       isLoading
-    } = this.props
+    } = this.props;
 
     const menuList = [
       {
@@ -124,7 +123,7 @@ export class Users extends Component {
         tooltip: intl.formatMessage({ id: 'open_filter' }),
         onClick: () => { setFilterIsOpen('users', true) }
       }
-    ]
+    ];
 
     const filterFields = [
       {
@@ -184,16 +183,16 @@ Users.propTypes = {
   intl: intlShape.isRequired,
   muiTheme: PropTypes.object.isRequired,
   auth: PropTypes.object.isRequired,
-}
+};
 
 const mapStateToProps = (state, ownProps) => {
-  const { lists, auth, filters } = state
-  const { match } = ownProps
+  const { auth, filters } = state;
+  const { match } = ownProps;
 
-  const isSelecting = match.params.select ? match.params.select : false
+  const isSelecting = match.params.select ? match.params.select : false;
 
-  const { hasFilters } = filterSelectors.selectFilterProps('companies', filters)
-  const list = filterSelectors.getFilteredList('users', filters, getList(state, path), fieldValue => fieldValue.val)
+  const { hasFilters } = filterSelectors.selectFilterProps('companies', filters);
+  const list = filterSelectors.getFilteredList('users', filters, getList(state, path), fieldValue => fieldValue.val);
 
   return {
     isSelecting,
@@ -202,7 +201,7 @@ const mapStateToProps = (state, ownProps) => {
     list,
     auth
   }
-}
+};
 
 
 export default connect(

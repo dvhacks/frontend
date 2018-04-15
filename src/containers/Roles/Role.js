@@ -1,7 +1,5 @@
 import Activity from '../../containers/Activity'
-import Avatar from 'material-ui/Avatar'
 import Dialog from 'material-ui/Dialog'
-import Divider from 'material-ui/Divider'
 import FireForm from 'fireform'
 import FlatButton from 'material-ui/FlatButton'
 import FontIcon from 'material-ui/FontIcon'
@@ -9,10 +7,8 @@ import React, { Component } from 'react'
 import RoleForm from '../../components/Forms/RoleForm'
 import RoleGrants from './RoleGrants'
 import Scrollbar from '../../components/Scrollbar/Scrollbar'
-import Toggle from 'material-ui/Toggle'
 import muiThemeable from 'material-ui/styles/muiThemeable'
 import withAppConfigs from '../../withAppConfigs'
-import { ListItem } from 'material-ui/List'
 import { ResponsiveMenu } from 'material-ui-responsive-menu'
 import { Tabs, Tab } from 'material-ui/Tabs'
 import { change, submit } from 'redux-form'
@@ -137,7 +133,6 @@ export class Role extends Component {
     return (
       <Activity
         isLoading={isLoading}
-        iconStyleRight={{ width: '50%' }}
         iconStyleLeft={{ width: 'auto' }}
         iconStyleRight={{ width: '100%', textAlign: 'center', marginLeft: 0 }}
         iconElementRight={

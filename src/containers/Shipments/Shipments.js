@@ -24,8 +24,6 @@ class Shipments extends Component {
   }
 
   renderList (shipments) {
-    const { history } = this.props;
-
     if (shipments === undefined) {
       return <div />;
     }

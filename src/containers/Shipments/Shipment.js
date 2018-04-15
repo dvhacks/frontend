@@ -80,7 +80,7 @@ class Shipment extends Component {
       return getAccount.then(payload => {
         return payload[0];
       }).then((walletId) => {
-        return instance.newShipment(values.id, parseInt(values.item_value), {
+        return instance.newShipment(values.id, parseInt(values.item_value, 10), {
           from: walletId,
           gas: 140000,
         })

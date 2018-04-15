@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import muiThemeable from 'material-ui/styles/muiThemeable';
 import {injectIntl, intlShape} from 'react-intl';
 import PropTypes from 'prop-types';
@@ -51,7 +51,7 @@ class ConfirmItem extends Component {
         return instance.enterRecipient(values.id, {
           from: walletId,
           gas: 140000,
-          value: parseInt(values.item_value),
+          value: parseInt(values.item_value, 10)
         });
       });
     }).catch(e => {

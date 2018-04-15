@@ -1,21 +1,16 @@
-import React, { Component } from 'react'
-import PropTypes from 'prop-types'
-import { intlShape } from 'react-intl'
-import { Field, reduxForm } from 'redux-form'
-import { TextField } from 'redux-form-material-ui'
-import ReactList from 'react-list'
-import { List } from 'material-ui/List'
-import Subheader from 'material-ui/Subheader'
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { intlShape } from 'react-intl';
+import { Field, reduxForm } from 'redux-form';
+import { TextField } from 'redux-form-material-ui';
 
 class RoleForm extends Component {
   render () {
     const {
       handleSubmit,
       intl,
-      initialized,
-      renderGrantItem,
-      grants
-    } = this.props
+      initialized
+    } = this.props;
 
     return (
       <form onSubmit={handleSubmit} style={{
@@ -57,7 +52,7 @@ class RoleForm extends Component {
         </div>
 
       </form>
-    )
+    );
   }
 }
 
@@ -67,6 +62,6 @@ RoleForm.propTypes = {
   intl: intlShape.isRequired,
   initialized: PropTypes.bool.isRequired,
   uid: PropTypes.string
-}
+};
 
 export default reduxForm({ form: 'role' })(RoleForm)

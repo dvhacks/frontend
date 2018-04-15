@@ -10,63 +10,56 @@ import FontIcon from 'material-ui/FontIcon';
 import FlatButton from 'material-ui/FlatButton';
 import Dialog from 'material-ui/Dialog';
 import { withFirebase } from 'firekit-provider'
-import FireForm from 'fireform'
 import { GoogleIcon, FacebookIcon, GitHubIcon, TwitterIcon } from '../../components/Icons';
 import muiThemeable from 'material-ui/styles/muiThemeable';
 import { change, submit, formValueSelector } from 'redux-form';
-import { ResponsiveMenu } from 'material-ui-responsive-menu'
-import { setDialogIsOpen } from '../../store/dialogs/actions'
+import { ResponsiveMenu } from 'material-ui-responsive-menu';
+import { setDialogIsOpen } from '../../store/dialogs/actions';
 
-const path = '/users/'
-const form_name = 'my_account'
+const form_name = 'my_account';
 
 export class MyAccount extends Component {
-
   getProviderIcon = (p) => {
-    const { muiTheme } = this.props
-    const color = muiTheme.palette.primary2Color
+    const { muiTheme } = this.props;
+    const color = muiTheme.palette.primary2Color;
 
     switch (p) {
       case 'google.com':
-        return <GoogleIcon color={color} />
-
+        return <GoogleIcon color={color} />;
       case 'facebook.com':
-        return <FacebookIcon color={color} />
-
+        return <FacebookIcon color={color} />;
       case 'twitter.com':
-        return <TwitterIcon color={color} />
-
+        return <TwitterIcon color={color} />;
       case 'github.com':
-        return <GitHubIcon color={color} />
-
+        return <GitHubIcon color={color} />;
       default:
-        return undefined
+        return;
     }
-  }
-
+  };
 
   handleEmailVerificationsSend = () => {
     const { firebaseApp } = this.props;
+
     firebaseApp.auth().currentUser.sendEmailVerification().then(() => {
       alert('Verification E-Mail send');
     })
-  }
+  };
 
   handlePhotoUploadSuccess = (snapshot) => {
     const { setSimpleValue, change } = this.props;
+
     change(form_name, 'photoURL', snapshot.downloadURL);
     setSimpleValue('new_company_photo', undefined);
-  }
+  };
 
   handleUserDeletion = () => {
     const { change, submit } = this.props;
+
     change(form_name, 'delete_user', true);
     submit(form_name)
-  }
+  };
 
   getProvider = (firebase, provider) => {
-    const { auth, firebaseApp, authError } = this.props;
-
     if (provider.indexOf('facebook') > -1) {
       return new firebase.auth.FacebookAuthProvider();
     }
@@ -98,66 +91,63 @@ export class MyAccount extends Component {
         const credential = firebase.auth.EmailAuthProvider.credential(
           auth.email,
           values.old_password
-        )
+        );
         firebaseApp.auth().currentUser.reauthenticateWithCredential(credential)
           .then(() => {
             if (onSuccess && onSuccess instanceof Function) {
               onSuccess();
             }
-          }, e => { authError(e) })
+          }, e => { authError(e) });
       } else {
         firebaseApp.auth().currentUser.reauthenticateWithPopup(this.getProvider(firebase, auth.providerData[0].providerId)).then(() => {
           if (onSuccess && onSuccess instanceof Function) {
             onSuccess()
           }
-        }, e => { authError(e) })
+        }, e => { authError(e) });
       }
     })
-
-
-  }
+  };
 
   isLinkedWithProvider = (provider) => {
     const { auth } = this.props;
-
-
+    
     try {
       return auth && auth.providerData && auth.providerData.find((p) => { return p.providerId === provider }) !== undefined;
     } catch (e) {
       return false;
     }
-  }
+  };
 
   linkUserWithPopup = (p) => {
     const { firebaseApp, authError, authStateChanged } = this.props;
-
-
+    
     import('firebase').then(firebase => {
-      const provider = this.getProvider(firebase, p)
+      const provider = this.getProvider(firebase, p);
 
       firebaseApp.auth().currentUser.linkWithPopup(provider)
         .then((payload) => {
           authStateChanged(firebaseApp.auth().currentUser);
         }, e => { authError(e) })
-    })
+    });
+  };
 
 
-  }
-
-
-  handleCreateValues = (values) => {
+  handleCreateValues = () => {
     return false;
-  }
+  };
 
   clean = (obj) => {
     Object.keys(obj).forEach((key) => (obj[key] === undefined) && delete obj[key]);
     return obj
-  }
-
-
-  onSubmit = (values, dispatch, props) => {
-    const { auth, firebaseApp, authStateChanged, authError } = this.props;
-
+  };
+  
+  onSubmit = (values,) => {
+    const {
+      auth,
+      firebaseApp,
+      authStateChanged,
+      authError
+    } = this.props;
 
     const simpleChange = (values.displayName && values.displayName.localeCompare(auth.displayName)) ||
       (values.photoURL && values.photoURL.localeCompare(auth.photoURL));
@@ -165,8 +155,7 @@ export class MyAccount extends Component {
     let simpleValues = {
       displayName: values.displayName,
       photoURL: values.photoURL
-    }
-
+    };
 
     //Change simple data
     if (simpleChange) {
@@ -174,8 +163,12 @@ export class MyAccount extends Component {
 
         firebaseApp.database().ref(`users/${auth.uid}`).update(this.clean(simpleValues)).then(() => {
           authStateChanged(values);
-        }, e => { authError(e) });
-      }, e => { authError(e) });
+        }, e => {
+          authError(e)
+        });
+      }, e => {
+        authError(e)
+      });
     }
 
     //Change email
@@ -183,11 +176,13 @@ export class MyAccount extends Component {
 
       this.reauthenticateUser(values, () => {
         firebaseApp.auth().currentUser.updateEmail(values.email).then(() => {
-          firebaseApp.database().ref(`users/${auth.uid}`).update({ email: values.email }).then(() => {
-            authStateChanged({ email: values.email });
-          }, e => { authError(e) });
+          firebaseApp.database().ref(`users/${auth.uid}`).update({email: values.email}).then(() => {
+            authStateChanged({email: values.email});
+          }, e => {
+            authError(e)
+          });
         }, e => {
-          authError(e)
+          authError(e);
 
           if (e.code === 'auth/requires-recent-login') {
             firebaseApp.auth().signOut().then(function () {
@@ -196,19 +191,17 @@ export class MyAccount extends Component {
               }, 1);
             });
           }
-
         });
       })
     }
 
     //Change password
     if (values.new_password) {
-
       this.reauthenticateUser(values, () => {
         firebaseApp.auth().currentUser.updatePassword(values.new_password).then(() => {
           firebaseApp.auth().signOut();
         }, e => {
-          authError(e)
+          authError(e);
 
           if (e.code === 'auth/requires-recent-login') {
             firebaseApp.auth().signOut().then(() => {
@@ -220,16 +213,15 @@ export class MyAccount extends Component {
         });
       })
     }
-
     // We manage the data saving above
     return false;
-  }
+  };
 
   handleClose = () => {
     const { setSimpleValue, setDialogIsOpen } = this.props;
     setSimpleValue('delete_user', false);
     setDialogIsOpen('auth_menu', false);
-  }
+  };
 
   handleDelete = () => {
     const { firebaseApp, authError } = this.props;
@@ -239,7 +231,7 @@ export class MyAccount extends Component {
         .then(() => {
           this.handleClose();
         }, e => {
-          authError(e)
+          authError(e);
 
           if (e.code === 'auth/requires-recent-login') {
             firebaseApp.auth().signOut().then(() => {
@@ -250,13 +242,13 @@ export class MyAccount extends Component {
           }
         });
     });
-  }
+  };
 
 
   validate = (values) => {
     const { auth } = this.props;
     const providerId = auth.providerData[0].providerId;
-    const errors = {}
+    const errors = {};
 
     if (!values.displayName) {
       errors.displayName = 'Required'
@@ -274,16 +266,14 @@ export class MyAccount extends Component {
       if (values.new_password.length < 6) {
         errors.new_password = 'Password should be at least 6 characters'
       } else if (values.new_password.localeCompare(values.new_password_confirmation)) {
-        errors.new_password = 'Must be equal'
+        errors.new_password = 'Must be equal';
         errors.new_password_confirmation = 'Must be equal'
       }
 
     }
-
-
+    
     return errors
-  }
-
+  };
 
   render() {
     const {
@@ -294,7 +284,6 @@ export class MyAccount extends Component {
       auth,
       muiTheme,
       submit,
-      firebaseApp,
       setDialogIsOpen
     } = this.props;
 
@@ -309,7 +298,7 @@ export class MyAccount extends Component {
         secondary={true}
         onClick={this.handleDelete}
       />,
-    ]
+    ];
 
     const menuList = [
       {
@@ -326,7 +315,7 @@ export class MyAccount extends Component {
         tooltip: intl.formatMessage({ id: 'delete' }),
         onClick: () => setSimpleValue('delete_user', true)
       }
-    ]
+    ];
 
     return (
       <Activity
@@ -379,13 +368,13 @@ MyAccount.propTypes = {
   vehicle_types: PropTypes.array,
 };
 
-const selector = formValueSelector(form_name)
+const selector = formValueSelector(form_name);
 
 const mapStateToProps = (state) => {
-  const { intl, simpleValues, auth } = state
+  const { intl, simpleValues, auth } = state;
 
-  const delete_user = simpleValues.delete_user
-  const new_user_photo = simpleValues.new_user_photo
+  const delete_user = simpleValues.delete_user;
+  const new_user_photo = simpleValues.new_user_photo;
 
   return {
     new_user_photo,

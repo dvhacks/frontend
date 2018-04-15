@@ -74,7 +74,7 @@ class Jobs extends Component {
   }
 
   render () {
-    const { intl, shipments, muiTheme, history, isGranted } = this.props;
+    const { intl, shipments, muiTheme } = this.props;
 
     return (
       <Activity
