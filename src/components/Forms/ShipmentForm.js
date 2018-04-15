@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { injectIntl, intlShape } from 'react-intl';
-import { Field, reduxForm, formValueSelector } from 'redux-form';
+import { Field, reduxForm } from 'redux-form';
 import { TextField } from 'redux-form-material-ui';
 import { setDialogIsOpen } from 'rmw-shell/lib/store/dialogs/actions';
 import { withRouter } from 'react-router-dom';
 import muiThemeable from 'material-ui/styles/muiThemeable';
 import PropTypes from 'prop-types';
-import {textFieldOptions} from "../../containers/options";
+import {textFieldOptions} from '../../containers/options';
 
 class ShipmentForm extends Component {
   constructor(props){

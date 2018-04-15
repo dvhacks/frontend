@@ -10,7 +10,6 @@ import FontIcon from 'material-ui/FontIcon';
 import FlatButton from 'material-ui/FlatButton';
 import Dialog from 'material-ui/Dialog';
 import { withFirebase } from 'firekit-provider';
-import FireForm from 'fireform';
 import { change, submit } from 'redux-form';
 import isGranted from '../../utils/auth';
 import shipment_contract_artifacts from '../../blockchain/build/contracts/SaveShip';
@@ -74,7 +73,7 @@ class Job extends Component {
         return instance.enterCourrier(id, {
           from: walletId,
           gas: 140000,
-          value: parseInt(item_value)
+          value: parseInt(item_value, 10)
         })
       })
     }).catch(e => {
@@ -98,13 +97,11 @@ class Job extends Component {
     const {
       history,
       intl,
-      setDialogIsOpen,
       dialogs,
       match,
       submit,
       muiTheme,
-      isGranted,
-      firebaseApp
+      isGranted
     } = this.props;
 
     const {
@@ -112,20 +109,6 @@ class Job extends Component {
       item_value,
     } = this.state.snapshot;
     const uid = match.params.uid;
-
-    const actions = [
-      <FlatButton
-        label={intl.formatMessage({ id: 'cancel' })}
-        primary
-        onClick={this.handleClose}
-      />,
-      <FlatButton
-        label={intl.formatMessage({ id: 'delete' })}
-        secondary
-        onClick={this.handleDelete}
-      />
-    ];
-
     const menuList = [
       {
         hidden: (uid === undefined && !isGranted(`create_${form_name}`)) || (uid !== undefined && !isGranted(`edit_${form_name}`)),

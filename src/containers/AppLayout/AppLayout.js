@@ -11,8 +11,6 @@ import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import { injectIntl } from 'react-intl'
 import { ToastContainer, toast, style } from 'react-toastify'
-import Avatar from 'material-ui/Avatar'
-import { ListItem } from 'material-ui/List'
 import FlatButton from 'material-ui/FlatButton';
 
 class AppLayout extends Component {
@@ -24,7 +22,7 @@ class AppLayout extends Component {
     style({
       colorDefault: muiTheme.palette.primary1Color,
       colorInfo: muiTheme.palette.primary1Color,
-    })
+    });
 
     if (window.updateAvailable) {
       this.setState({
@@ -43,7 +41,7 @@ class AppLayout extends Component {
       </div>
 
     </div>)
-  }
+  };
 
   componentWillReceiveProps() {
 
@@ -56,20 +54,19 @@ class AppLayout extends Component {
   }
 
   handleActionClick = () => {
-    window.updateAvailable = false
-    window.location.href = window.location.href
+    window.updateAvailable = false;
+    window.location.href = window.location.href;
   };
 
 
   render() {
-    const { muiTheme, history, appConfig, intl } = this.props
-    const drawerWidth = appConfig.drawer_width
-    const path = history.location.pathname
-    const customRoutes = appConfig.routes ? appConfig.routes : []
-    const appRoutes = getAppRoutes(appConfig.firebaseLoad)
+    const { muiTheme, history, appConfig } = this.props;
+    const drawerWidth = appConfig.drawer_width;
+    const path = history.location.pathname;
+    const customRoutes = appConfig.routes ? appConfig.routes : [];
+    const appRoutes = getAppRoutes(appConfig.firebaseLoad);
 
     return (
-
       <div style={{ backgroundColor: muiTheme.palette.canvasColor, height: '100%', position: 'absolute', top: 0, bottom: 0, right: 0, left: 0 }}>
         <ResponsiveDrawer width={drawerWidth}>
           <Scrollbar>
@@ -82,12 +79,9 @@ class AppLayout extends Component {
           {customRoutes.map((Route, i) => { return React.cloneElement(Route, { key: `@customRoutes/${i}` }) })}
           {appRoutes.map((Route, i) => { return React.cloneElement(Route, { key: `@appRoutes/${i}` }) })}
         </Switch>
-
         <ToastContainer />
-
       </div>
-
-    )
+    );
   }
 }
 
@@ -95,7 +89,7 @@ const mapStateToProps = (state) => {
   const { theme, locale, messaging } = state;
 
   return {
-    theme, // We need this so the theme change triggers rerendering
+    theme, // We need this so the theme change triggers re-rendering
     locale,
     messaging
   }

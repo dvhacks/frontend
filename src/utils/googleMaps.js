@@ -26,6 +26,7 @@ export const haversineDistance = function(start, end) {
   const earth_radius = 6371;
   
   if (Number.prototype.toRadians === undefined) {
+    // eslint-disable-next-line no-extend-native
     Number.prototype.toRadians = function() {
       return this * Math.PI / 180;
     }

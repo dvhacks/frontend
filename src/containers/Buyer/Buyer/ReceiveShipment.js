@@ -14,7 +14,6 @@ import { connect } from "react-redux";
 import { change, submit } from 'redux-form';
 
 const path = '/shipments/';
-const form_name = 'shipment';
 
 class ReceiveShipment extends Component {
   constructor(props) {
@@ -85,12 +84,8 @@ class ReceiveShipment extends Component {
     const {
       history,
       intl,
-      dialogs,
-      match,
-      muiTheme,
+      dialogs
     } = this.props;
-
-    const uid = match.params.uid;
 
     return (
       <Activity
