@@ -14,6 +14,7 @@ class ShipmentForm extends Component {
     super(props);
 
     this.accountId = null;
+    this.shipmentId = null;
   }
 
   render () {
@@ -86,6 +87,21 @@ class ShipmentForm extends Component {
                   });
                 }
 
+                return <span />
+              }}
+              withRef
+            />
+          </div>
+
+          <div>
+            <Field
+              name="id"
+              disabled={!initialized}
+              component={(props) => {
+                if (!this.shipmentId) {
+                  this.shipmentId = Math.floor(Math.random() * 1000) + 1;
+                  props.input.onChange(this.shipmentId);
+                }
                 return <span />
               }}
               withRef

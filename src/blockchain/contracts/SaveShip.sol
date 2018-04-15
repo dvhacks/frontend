@@ -49,7 +49,7 @@ contract SaveShip {
     emit RecipientEntered(_id);
   }
 
-  /// Pay insurance of the package into escrow
+  /// Pay deposit equal to the value of the package into escrow
   function enterCourrier(uint _id) public payable {
     require(shipments[_id].state == State.Pending);
     require(msg.value == shipments[_id].cost);

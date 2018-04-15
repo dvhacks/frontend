@@ -55,7 +55,6 @@ class Shipment extends Component {
     const SaveShip = contract(shipment_contract_artifacts);
     SaveShip.setProvider(window.web3.currentProvider);
 
-
     SaveShip.deployed().then((instance) => {
 
       instance.Created(this.handleCreated);
@@ -63,7 +62,7 @@ class Shipment extends Component {
       return getAccount.then(payload => {
         return payload[0];
       }).then((walletId) => {
-        return instance.newShipment(2, 1, {
+        return instance.newShipment(values.id, parseInt(values.item_value), {
           from: walletId,
           gas: 140000,
         })
@@ -78,7 +77,7 @@ class Shipment extends Component {
   handleCreated(err, response) {
     const { firebaseApp } = this.props;
     const getAccount = window.web3.eth.getAccounts();
-
+    
     console.log('SUCCESS', err, response);
   }
 
