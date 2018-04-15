@@ -2,30 +2,40 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { injectIntl, intlShape } from 'react-intl';
 import { Field, reduxForm, formValueSelector } from 'redux-form';
-import { TextField } from 'redux-form-material-ui';
+import { TextField, Checkbox } from 'redux-form-material-ui';
 import { setDialogIsOpen } from 'rmw-shell/lib/store/dialogs/actions';
 import { withRouter } from 'react-router-dom';
 import muiThemeable from 'material-ui/styles/muiThemeable';
 import PropTypes from 'prop-types';
 import {textFieldOptions} from "../../containers/options";
 
-class ShipmentForm extends Component {
+class ConfirmItemForm extends Component {
   constructor(props){
     super(props);
 
     this.accountId = null;
     this.shipmentId = null;
+
+    this.state = {
+      location: null
+    };
+
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  handleSubmit() {
+    console.log(arguments);
+debugger
+    this.props.handleSubmit(...arguments);
   }
 
   render () {
     const {
-      intl,
-      initialized,
-      handleSubmit
+      intl
     } = this.props;
 
     return (
-      <form onSubmit={handleSubmit} style={{
+      <form onSubmit={this.handleSubmit} style={{
         height: '100%',
         width: '100%',
         alignItems: 'strech',
@@ -42,7 +52,7 @@ class ShipmentForm extends Component {
             <Field
               {...textFieldOptions}
               name="item_name"
-              disabled={!initialized}
+              disabled={true}
               component={TextField}
               hintText={intl.formatMessage({ id: 'item_name_hint', defaultMessage: 'Name of the item' })}
               floatingLabelText={intl.formatMessage({ id: 'item_name_label', defaultMessage: 'Name' })}
@@ -55,7 +65,7 @@ class ShipmentForm extends Component {
             <Field
               {...textFieldOptions}
               name="recipient_email"
-              disabled={!initialized}
+              disabled={true}
               component={TextField}
               hintText={intl.formatMessage({ id: 'recipient_email_hint', defaultMessage: 'Email of the recipient' })}
               floatingLabelText={intl.formatMessage({ id: 'recipient_email_label', defaultMessage: 'Recipient email' })}
@@ -68,7 +78,7 @@ class ShipmentForm extends Component {
             <Field
               {...textFieldOptions}
               name="item_value"
-              disabled={!initialized}
+              disabled={true}
               component={TextField}
               hintText={intl.formatMessage({ id: 'item_value_hint', defaultMessage: 'Price of the package' })}
               floatingLabelText={intl.formatMessage({ id: 'item_value_label', defaultMessage: 'Total price' })}
@@ -79,8 +89,19 @@ class ShipmentForm extends Component {
 
           <div>
             <Field
+              {...textFieldOptions}
+              name="item_confirmed"
+              component={Checkbox}
+              label={intl.formatMessage({ id: 'item_value_hint', defaultMessage: 'Confirmed' })}
+              ref="item_confirmed"
+              withRef
+            />
+          </div>
+
+          <div>
+            <Field
               name="wallet_id"
-              disabled={!initialized}
+              disabled={true}
               component={(props) => {
                 if (!this.accountId) {
                   const getAccount = window.web3.eth.getAccounts();
@@ -98,7 +119,7 @@ class ShipmentForm extends Component {
           <div>
             <Field
               name="id"
-              disabled={!initialized}
+              disabled={true}
               component={(props) => {
                 if (!this.shipmentId) {
                   this.shipmentId = Math.floor(Math.random() * 1000) + 1;
@@ -109,13 +130,12 @@ class ShipmentForm extends Component {
             />
           </div>
         </div>
-
       </form>
     );
   }
 }
 
-ShipmentForm.propTypes = {
+ConfirmItemForm.propTypes = {
   handleSubmit: PropTypes.func.isRequired,
   intl: intlShape.isRequired,
   initialized: PropTypes.bool.isRequired,
@@ -124,7 +144,7 @@ ShipmentForm.propTypes = {
   match: PropTypes.object.isRequired
 };
 
-const ConnectedForm = reduxForm({ form: 'shipment' })(ShipmentForm);
+const ConnectedForm = reduxForm({ form: 'shipment' })(ConfirmItemForm);
 const mapStateToProps = state => {
   const { intl, vehicleTypes, users, dialogs } = state;
 
