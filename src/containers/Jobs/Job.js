@@ -68,7 +68,7 @@ class Job extends Component {
 
     SaveShip.deployed().then((instance) => {
 
-      instance.Created(this.handleCreated);
+      instance.Created(this.handleUpdated);
 
       return getAccount.then(payload => {
         return payload[0];
