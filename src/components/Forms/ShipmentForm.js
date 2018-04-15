@@ -22,15 +22,10 @@ class ShipmentForm extends Component {
 
   render () {
     const {
-      handleSubmit,
       intl,
       initialized,
-      setDialogIsOpen,
-      dialogs,
       match
     } = this.props;
-
-    const uid = match.params.uid;
 
     return (
       <form onSubmit={this.handleSubmit} style={{
@@ -48,8 +43,8 @@ class ShipmentForm extends Component {
               name="item_name"
               disabled={!initialized}
               component={TextField}
-              hintText={intl.formatMessage({ id: 'item_name_hint' })}
-              floatingLabelText={intl.formatMessage({ id: 'item_name_label' })}
+              hintText={intl.formatMessage({ id: 'item_name_hint', defaultMessage: 'Name of the item' })}
+              floatingLabelText={intl.formatMessage({ id: 'item_name_label', defaultMessage: 'Name' })}
               withRef
             />
           </div>
@@ -59,8 +54,8 @@ class ShipmentForm extends Component {
               name="recipient_email"
               disabled={!initialized}
               component={TextField}
-              hintText={intl.formatMessage({ id: 'recipient_email_hint' })}
-              floatingLabelText={intl.formatMessage({ id: 'recipient_email_label' })}
+              hintText={intl.formatMessage({ id: 'recipient_email_hint', defaultMessage: 'Email of the recipient' })}
+              floatingLabelText={intl.formatMessage({ id: 'recipient_email_label', defaultMessage: 'Recipient email' })}
               ref="recipient_email"
               withRef
             />
@@ -71,8 +66,8 @@ class ShipmentForm extends Component {
               name="item_value"
               disabled={!initialized}
               component={TextField}
-              hintText={intl.formatMessage({ id: 'item_value_hint' })}
-              floatingLabelText={intl.formatMessage({ id: 'item_value_label' })}
+              hintText={intl.formatMessage({ id: 'item_value_hint', defaultMessage: 'Price of the package' })}
+              floatingLabelText={intl.formatMessage({ id: 'item_value_label', defaultMessage: 'Total price' })}
               withRef
             />
           </div>
@@ -112,7 +107,6 @@ ShipmentForm.propTypes = {
 };
 
 const ConnectedForm = reduxForm({ form: 'shipment' })(ShipmentForm);
-const selector = formValueSelector('shipment');
 const mapStateToProps = state => {
   const { intl, vehicleTypes, users, dialogs } = state;
 

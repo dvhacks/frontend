@@ -64,7 +64,7 @@ class Shipments extends Component {
       <Activity
         isLoading={shipments === undefined}
         containerStyle={{ overflow: 'hidden' }}
-        title={intl.formatMessage({ id: 'shipments' })}>
+        title={intl.formatMessage({ id: 'shipments', defaultMessage: 'Your Shipments' })}>
 
         <Scrollbar>
 

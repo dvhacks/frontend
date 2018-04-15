@@ -6,8 +6,6 @@ import {
   BottomNavigationItem,
   FlatButton,
   FontIcon,
-  List,
-  ListItem,
   Paper
 } from 'material-ui';
 import {injectIntl, intlShape} from 'react-intl';

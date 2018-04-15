@@ -35,9 +35,15 @@ class Shipment extends Component {
     const { intl } = this.props;
     const errors = {}
 
-    errors.item_name = !values.item_name ? intl.formatMessage({ id: 'error_required_field' }) : '';
-    errors.item_value = !values.item_value ? intl.formatMessage({ id: 'error_required_field' }) : '';
-    errors.recipient_email = !values.recipient_email ? intl.formatMessage({ id: 'error_required_field' }) : '';
+    errors.item_name = !values.item_name
+      ? intl.formatMessage({ id: 'error_required_field', defaultMessage: 'Name is required'})
+      : '';
+    errors.item_value = !values.item_value
+      ? intl.formatMessage({ id: 'error_required_field', defaultMessage: 'Value is required' })
+      : '';
+    errors.recipient_email = !values.recipient_email
+      ? intl.formatMessage({ id: 'error_required_field', defaultMessage: 'Email is required' })
+      : '';
 
     return errors
   };
@@ -157,7 +163,10 @@ class Shipment extends Component {
         }
 
         onBackClick={() => { history.goBack() }}
-        title={intl.formatMessage({ id: match.params.uid ? 'edit_shipment' : 'create_shipment' })}>
+        title={intl.formatMessage({
+          id: match.params.uid ? 'edit_shipment' : 'create_shipment' ,
+          defaultMessage: match.params.uid ? 'Edit shipment' : 'Ship it!'
+        })}>
 
         <div style={{ margin: 15, display: 'flex' }}>
 

@@ -30,6 +30,7 @@ html, body, #root{
 .loader {
   animation: spin infinite 20s linear;
   height: 80px;
+  color: #66bf9a;
 }
 
 @keyframes spin {

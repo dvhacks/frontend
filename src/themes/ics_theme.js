@@ -9,9 +9,9 @@ import { fade } from 'material-ui/utils/colorManipulator';
 
 export default {
   palette: {
-    primary1Color: indigo500,
-    primary2Color: indigo700,
-    primary3Color: grey600,
+    primary1Color: '#66bf9a',
+    primary2Color: '#58cd9d',
+    primary3Color: '#3fb082',
     accent1Color: pinkA200,
     accent2Color: pinkA400,
     accent3Color: pinkA100,
