@@ -11,8 +11,6 @@ import {
   Paper
 } from 'material-ui';
 import { injectIntl, intlShape } from 'react-intl';
-// import { Activity } from 'rmw-shell';
-// import { withFirebase } from 'firekit-provider';
 
 const buttonOptions = {
   backgroundColor: '#00cea5',
