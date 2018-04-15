@@ -28,14 +28,15 @@ html, body, #root{
 }
 
 .loader {
-  animation: spin infinite 20s linear;
+  animation: zoomy infinite 1s linear;
   height: 80px;
   color: #66bf9a;
 }
 
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+@keyframes zoomy {
+  0% { transform: scale3d(1, 1, 1); }
+  50% { transform: scale3d(2, 2, 2); }
+  100% { transform: scale3d(1, 1, 1); }
 }
 
 .oscilloscope {

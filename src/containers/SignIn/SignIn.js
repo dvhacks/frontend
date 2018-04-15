@@ -10,7 +10,7 @@ import firebaseui from 'firebaseui'
 
 export class SignIn extends Component {
   render () {
-    const { intl, firebaseApp, appConfig } = this.props
+    const { intl, firebaseApp, appConfig } = this.props;
 
     let uiConfig = {
       signInSuccessUrl: '/',
@@ -39,14 +39,14 @@ export class SignIn extends Component {
 
 SignIn.propTypes = {
   intl: PropTypes.object.isRequired
-}
+};
 
 const mapStateToProps = (state) => {
-  const { browser } = state
+  const { browser } = state;
   return {
     browser
   }
-}
+};
 
 export default connect(
   mapStateToProps

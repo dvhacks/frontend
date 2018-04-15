@@ -86,7 +86,6 @@ class Shipment extends Component {
     const { setDialogIsOpen } = this.props;
 
     setDialogIsOpen('delete_shipment', false);
-
   };
 
   handleDelete = () => {
@@ -183,12 +182,12 @@ class Shipment extends Component {
           </FireForm>
         </div>
         <Dialog
-          title={intl.formatMessage({ id: 'delete_shipment_title' })}
+          title={intl.formatMessage({ id: 'delete_shipment_title', defaultMessage: 'Delete shipment' })}
           actions={actions}
           modal={false}
           open={dialogs.delete_shipment === true}
           onRequestClose={this.handleClose}>
-          {intl.formatMessage({ id: 'delete_shipment_message' })}
+          {intl.formatMessage({ id: 'delete_shipment_message', defaultMessage: 'Delete shipment' })}
         </Dialog>
 
       </Activity>

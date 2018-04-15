@@ -7,29 +7,25 @@ import { setDialogIsOpen } from 'rmw-shell/lib/store/dialogs/actions';
 import { withRouter } from 'react-router-dom';
 import muiThemeable from 'material-ui/styles/muiThemeable';
 import PropTypes from 'prop-types';
+import {textFieldOptions} from "../../containers/options";
 
 class ShipmentForm extends Component {
   constructor(props){
     super(props);
 
-    this.handleSubmit = this.handleSubmit.bind(this);
     this.accountId = null;
-  }
-
-  handleSubmit() {
-    this.props.handleSubmit(...arguments);
   }
 
   render () {
     const {
       intl,
       initialized,
-      match
     } = this.props;
 
     return (
-      <form onSubmit={this.handleSubmit} style={{
+      <form onSubmit={this.props.handleSubmit} style={{
         height: '100%',
+        width: '100%',
         alignItems: 'strech',
         display: 'flex',
         flexWrap: 'wrap',
@@ -37,9 +33,12 @@ class ShipmentForm extends Component {
       }}>
         <button type="submit" style={{ display: 'none' }} />
 
-        <div>
+        <div style={{
+          flex: 1
+        }}>
           <div>
             <Field
+              {...textFieldOptions}
               name="item_name"
               disabled={!initialized}
               component={TextField}
@@ -51,6 +50,7 @@ class ShipmentForm extends Component {
 
           <div>
             <Field
+              {...textFieldOptions}
               name="recipient_email"
               disabled={!initialized}
               component={TextField}
@@ -63,6 +63,7 @@ class ShipmentForm extends Component {
 
           <div>
             <Field
+              {...textFieldOptions}
               name="item_value"
               disabled={!initialized}
               component={TextField}
