@@ -5,21 +5,30 @@ try {
   admin.initializeApp();
 } catch (e) { }
 const nodemailer = require('nodemailer');
-const gmailEmail = encodeURIComponent(functions.config().gmail.email);
-const gmailPassword = encodeURIComponent(functions.config().gmail.password);
-const host = encodeURIComponent(functions.config().host.base_url);
-const mailTransport = nodemailer.createTransport(`smtps://${gmailEmail}:${gmailPassword}@smtp.gmail.com`);
+const gmailEmail = functions.config().gmail.email;
+const gmailPassword = functions.config().gmail.password;
+const host = functions.config().host.base_url;
+const mailTransport = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: gmailEmail,
+    pass: gmailPassword
+  }
+});
 
 exports = module.exports = functions.database.ref('/shipments/{shipmentUid}').onCreate((shipment, context) => {
-  const recipientEmail = shipment.recipient_email;
+  console.log('shipment', shipment);
+  console.log('context', context);
+
+  const recipientEmail = shipment._data.recipient_email;
   const promises = [];
 
   if (recipientEmail) {
     const mailOptions = {
-      from: `"Alexander Reichert" <${gmailEmail}>`,
+      from: `"Grasshoppr" <${gmailEmail}>`,
       to: recipientEmail,
       subject: `Hi! Someone wants to ship a package to you!`,
-      text: `if you would like to receive this package click go here ${host}/shipment/receive`
+      text: `if you would like to receive this package click go here ${host}/confirm/${context.params.shipmentUid}`
     };
 
     promises.push(mailTransport.sendMail(mailOptions));
