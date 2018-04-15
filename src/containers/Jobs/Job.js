@@ -13,7 +13,6 @@ import { withFirebase } from 'firekit-provider'
 import FireForm from 'fireform'
 import { change, submit } from 'redux-form';
 import isGranted from '../../utils/auth';
-import ShipmentForm from "../../components/Forms/ShipmentForm";
 import shipment_contract_artifacts from '../../blockchain/build/contracts/SaveShip'
 import contract from 'truffle-contract';
 import { setDialogIsOpen } from "../../store/dialogs/actions";
@@ -24,33 +23,34 @@ const path = '/shipments/';
 const form_name = 'shipment';
 
 
-class Shipment extends Component {
+class Job extends Component {
   constructor(props) {
     super(props);
 
     this.handleCreateValues = this.handleCreateValues.bind(this);
-    this.handleCreated = this.handleCreated.bind(this);
     this.handleSubmitSuccess = this.handleSubmitSuccess.bind(this);
+
+    this.state = {
+      isLoading: true,
+      snapshot: {}
+    };
 
     this.createdEventHack = 0;
   }
 
-  validate = (values) => {
-    const { intl } = this.props;
-    const errors = {};
+  componentDidMount () {
+    const { firebaseApp, match } = this.props;
+    const uid = match.params.uid;
 
-    errors.item_name = !values.item_name
-      ? intl.formatMessage({ id: 'error_required_field', defaultMessage: 'Name is required'})
-      : '';
-    errors.item_value = !values.item_value
-      ? intl.formatMessage({ id: 'error_required_field', defaultMessage: 'Value is required' })
-      : '';
-    errors.recipient_email = !values.recipient_email
-      ? intl.formatMessage({ id: 'error_required_field', defaultMessage: 'Email is required' })
-      : '';
-
-    return errors
-  };
+    firebaseApp.database().ref(`${path}${uid}`).once('value',
+      snapshot => {
+        debugger;
+        this.setState({
+          isLoading: false,
+          snapshot: snapshot.val()
+        })
+      })
+  }
 
   handleCreateValues(values) {
     const { auth } = this.props;
@@ -73,7 +73,7 @@ class Shipment extends Component {
       return getAccount.then(payload => {
         return payload[0];
       }).then((walletId) => {
-        return instance.newShipment(values.id, parseInt(values.item_value), {
+        return instance.newJob(2, 1, {
           from: walletId,
           gas: 140000,
         })
@@ -82,38 +82,6 @@ class Shipment extends Component {
       console.log(e);
     });
   }
-
-  handleCreated(err, response) {
-    const { history, setDialogIsOpen } = this.props;
-    if (this.createdEventHack === 0) {
-      this.createdEventHack += 1;
-    } else {
-      setDialogIsOpen('processing_shipment', false);
-      this.createdEventHack = 0;
-      history.push('/shipments');
-    }
-  }
-
-  handleClose = () => {
-    const { setDialogIsOpen } = this.props;
-
-    setDialogIsOpen('delete_shipment', false);
-
-  };
-
-  handleDelete = () => {
-
-    const { history, match, firebaseApp } = this.props;
-    const uid = match.params.uid;
-
-    if (uid) {
-      firebaseApp.database().ref().child(`${path}${uid}`).remove().then(() => {
-        this.handleClose();
-        history.goBack();
-      })
-    }
-  };
-
 
   render() {
 
@@ -129,6 +97,11 @@ class Shipment extends Component {
       firebaseApp
     } = this.props;
 
+    const {
+      item_name,
+      item_value,
+    } = this.state.snapshot;
+console.log(this.state.snapshot);
     const uid = match.params.uid;
 
     const actions = [
@@ -175,32 +148,23 @@ class Shipment extends Component {
 
         onBackClick={() => { history.goBack() }}
         title={intl.formatMessage({
-          id: match.params.uid ? 'edit_shipment' : 'create_shipment' ,
-          defaultMessage: match.params.uid ? 'Edit shipment' : 'Ship it!'
+          id:'job_title',
+          defaultMessage: 'Jobdetails'
         })}>
 
-        <div style={{ margin: 15, display: 'flex' }}>
+        <div style={{ margin: 15, display: 'flex'}}>
+          <div style={{
+            justifyContent: 'space-around'
+          }}>
+            <div>
+              {item_name}
+            </div>
+            <div>
+              5
+            </div>
+          </div>
 
-          <FireForm
-            firebaseApp={firebaseApp}
-            name={'shipment'}
-            path={`${path}`}
-            validate={this.validate}
-            handleCreateValues={this.handleCreateValues}
-            onSubmitSuccess={this.handleSubmitSuccess}
-            onDelete={(values) => { history.push('/shipments'); }}
-            uid={match.params.uid}>
-            <ShipmentForm />
-          </FireForm>
         </div>
-        <Dialog
-          title={intl.formatMessage({ id: 'delete_shipment_title', defaultMessage: 'Delete shipment' })}
-          actions={actions}
-          modal={false}
-          open={dialogs.delete_shipment === true}
-          onRequestClose={this.handleClose}>
-          {intl.formatMessage({ id: 'delete_shipment_message', defaultMessage: 'Delete shipment' })}
-        </Dialog>
         <Dialog
           title={intl.formatMessage({ id: 'processing_transaction', defaultMessage: 'Processing your shipment' })}
           modal={false}
@@ -222,7 +186,7 @@ class Shipment extends Component {
   }
 }
 
-Shipment.propTypes = {
+Job.propTypes = {
   history: PropTypes.object,
   intl: intlShape.isRequired,
   setDialogIsOpen: PropTypes.func.isRequired,
@@ -247,4 +211,4 @@ const mapStateToProps = (state) => {
 
 export default connect(
   mapStateToProps, { setDialogIsOpen, change, submit }
-)(injectIntl(withRouter(withFirebase(muiThemeable()(Shipment)))));
+)(injectIntl(withRouter(withFirebase(muiThemeable()(Job)))));

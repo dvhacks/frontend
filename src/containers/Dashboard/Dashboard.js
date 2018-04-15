@@ -36,14 +36,19 @@ class Dashboard extends Component {
               history.push('/shipments/create')
             }}
           >
-            Seller
+            Send
           </FlatButton>
-          <FlatButton {...buttonOptions}>
-            Buyer
+          <FlatButton
+            {...buttonOptions}
+            onClick={() => {
+              history.push('/jobs')
+            }}
+          >
+            Deliver
           </FlatButton>
 
           <FlatButton {...buttonOptions}>
-            Courier
+            My Shipments
           </FlatButton>
         </div>
         <Paper zDepth={1}>
