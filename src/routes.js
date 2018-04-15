@@ -12,12 +12,14 @@ const AsyncShipment = MyLoadable({loader: () => import('./containers/Shipments/S
 const AsyncShipments = MyLoadable({loader: () => import('./containers/Shipments/Shipments')});
 const AsyncJobs = MyLoadable({loader: () => import('./containers/Jobs/Jobs')});
 const AsyncJob = MyLoadable({loader: () => import('./containers/Jobs/Job')});
+const AsyncConfirm = MyLoadable({loader: () => import('./containers/Buyer/Buyer/ConfirmItem')});
 
 const Routes = [
   <RestrictedRoute type='private' path="/" exact component={AsyncDashboard}/>,
   <RestrictedRoute type='private' path="/shipments" exact component={AsyncShipments}/>,
   <RestrictedRoute type='private' path="/shipments/create" exact component={AsyncShipment}/>,
   <RestrictedRoute type='private' path="/shipments/edit/:uid" exact component={AsyncShipment}/>,
+  <RestrictedRoute type='private' path="/confirm/:uid" exact component={AsyncConfirm}/>,
   <RestrictedRoute type='private' path="/jobs" exact component={AsyncJobs}/>,
   <RestrictedRoute type='private' path="/jobs/details/:uid" exact component={AsyncJob}/>,
   <RestrictedRoute type='private' path="/dashboard" exact component={AsyncDashboard}/>
