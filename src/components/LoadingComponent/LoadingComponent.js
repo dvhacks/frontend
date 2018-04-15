@@ -35,6 +35,6 @@ export const LoadingComponent = (props) => {
     // This case shouldn't happen... but we'll return null anyways.
     return null
   }
-}
+};
 
 export default LoadingComponent
