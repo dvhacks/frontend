@@ -18,6 +18,7 @@ import shipment_contract_artifacts from '../../blockchain/build/contracts/SaveSh
 import contract from 'truffle-contract';
 import { setDialogIsOpen } from "../../store/dialogs/actions";
 import {CircularProgress} from "material-ui";
+import {getGeolocation} from "../../utils/googleMaps";
 
 
 const path = '/shipments/';
@@ -33,6 +34,11 @@ class Shipment extends Component {
     this.handleSubmitSuccess = this.handleSubmitSuccess.bind(this);
 
     this.createdEventHack = 0;
+    props.setDialogIsOpen('processing_shipment', false);
+
+    this.state = {
+      location: null
+    }
   }
 
   validate = (values) => {
@@ -57,7 +63,7 @@ class Shipment extends Component {
     const userUid = auth.uid;
     this.handleSubmitSuccess(values);
 
-    return Object.assign({}, values, { user_id: userUid });
+    return Object.assign({}, values, { user_id: userUid, pickup_location: this.state.location });
   }
 
   handleSubmitSuccess(values) {
@@ -84,7 +90,7 @@ class Shipment extends Component {
     });
   }
 
-  handleCreated(err, response) {
+  handleCreated() {
     const { history, setDialogIsOpen } = this.props;
     if (this.createdEventHack === 0) {
       this.createdEventHack += 1;
@@ -147,7 +153,7 @@ class Shipment extends Component {
 
     const menuList = [
       {
-        hidden: (uid === undefined && !isGranted(`create_${form_name}`)) || (uid !== undefined && !isGranted(`edit_${form_name}`)),
+        hidden: (uid === undefined && !isGranted(`create_${form_name}`)) || (uid !== undefined && !isGranted(`edit_${form_name}`)) || (!this.state.location),
         text: intl.formatMessage({ id: 'save' }),
         icon: <FontIcon className="material-icons" color={muiTheme.palette.canvasColor}>save</FontIcon>,
         tooltip: intl.formatMessage({ id: 'save' }),
@@ -159,6 +165,31 @@ class Shipment extends Component {
         icon: <FontIcon className="material-icons" color={muiTheme.palette.canvasColor}>delete</FontIcon>,
         tooltip: intl.formatMessage({ id: 'delete' }),
         onClick: () => { setDialogIsOpen('delete_shipment', true); }
+      },
+      {
+        hidden: (this.state.location),
+        text: intl.formatMessage({ id: 'locate' }),
+        icon: <FontIcon className="material-icons" color={muiTheme.palette.canvasColor}>my_location</FontIcon>,
+        tooltip: intl.formatMessage({ id: 'locate' }),
+        onClick: () => {
+          getGeolocation((pos) => {
+              if (!pos) {
+                return;
+              } else if (!pos.coords) {
+                return;
+              }
+
+              const lat = pos.coords.latitude;
+              const lon = pos.coords.longitude;
+
+              this.setState({
+                location: {
+                  lat, lon
+                }
+              });
+            },
+            (error) => console.log(error))
+        }
       }
     ];
 
