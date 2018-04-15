@@ -102,8 +102,6 @@ Roles.propTypes = {
 };
 
 const mapStateToProps = (state) => {
-  const { lists } = state;
-
   return {
     list: getList(state, path),
     isLoading: isLoading(state, path)
