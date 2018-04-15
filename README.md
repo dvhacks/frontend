@@ -1,6 +1,15 @@
 [![logo](grasshoppr.png)](https://grasshoppr.co)
 
-This project was bootstrapped with [React Most Wanted](https://www.react-most-wanted.com/).
+## Team
+
+ - Dejan Eremic
+ - Jakub Horak
+ - Matt Finucane
+ - Alexander Reichert
+ 
+## Project description
+
+Peer to peer decentralized shipping platform using blockchain on ETH - aiming towards building a decentralized mobility network.
 
 ## Folder Structure
 
@@ -101,4 +110,20 @@ After it finished follow the instructions or publish the project build folder to
 - [ ] recipient (buyer) screens
 - [ ] admin view
 - [ ] replace Metamask and sign transactions using biometric authentication with [uPort.me](https://www.uport.me/)
-
+- [ ] Add proper permissions/roles and protect data
+- [ ] Add error handling, right now only the happy path works (if at all)
+- [ ] Refactor/Restructure, there are too many "smart" components - and all smart-components live in one file - this should change
+- [ ] Links between pages based on state/roles
+- [ ] Implement map views in multiple places
+- [ ] add i18n messages where missing
+- [ ] remove hardcoded config variables from the app into the environment
+- [ ] unify package json files
+- [ ] add full test coverage - unit, integration, e2e
+- [ ] integration with social media services
+- [ ] dockerize the application for easier start/development
+- [ ] imoprove the PWA setup
+- [ ] add server side rendering/isomorphism
+- [ ] optimize gas usage
+- [ ] open zeppelin to make the contract more secure
+- [ ] ci/cd setup
+- [ ] improve design
