@@ -55,6 +55,7 @@ class Shipment extends Component {
   handleCreateValues(values) {
     const { auth } = this.props;
     const userUid = auth.uid;
+    this.handleSubmitSuccess(values);
 
     return Object.assign({}, values, { user_id: userUid });
   }
@@ -64,10 +65,10 @@ class Shipment extends Component {
     const getAccount = window.web3.eth.getAccounts();
     const SaveShip = contract(shipment_contract_artifacts);
     SaveShip.setProvider(window.web3.currentProvider);
-    setDialogIsOpen('processing_shipment', true);
 
     SaveShip.deployed().then((instance) => {
 
+      setDialogIsOpen('processing_shipment', true);
       instance.Created(this.handleCreated);
 
       return getAccount.then(payload => {
@@ -187,7 +188,6 @@ class Shipment extends Component {
             path={`${path}`}
             validate={this.validate}
             handleCreateValues={this.handleCreateValues}
-            onSubmitSuccess={this.handleSubmitSuccess}
             onDelete={(values) => { history.push('/shipments'); }}
             uid={match.params.uid}>
             <ShipmentForm />
