@@ -22,7 +22,7 @@ const path = '/shipments/';
 const form_name = 'shipment';
 
 class Job extends Component {
-  constructor (props) {
+  constructor(props) {
     super(props);
 
     this.handleCreateValues = this.handleCreateValues.bind(this);
@@ -34,7 +34,7 @@ class Job extends Component {
       snapshot: {}
     };
 
-    this.createdEventHack = 0
+    this.createdEventHack = 0;
   }
 
   componentDidMount () {
@@ -50,14 +50,14 @@ class Job extends Component {
       })
   }
 
-  handleCreateValues (values) {
+  handleCreateValues(values) {
     const { auth } = this.props;
     const userUid = auth.uid;
 
-    return Object.assign({}, values, { user_id: userUid })
+    return Object.assign({}, values, { user_id: userUid });
   }
 
-  handleSubmitSuccess (values) {
+  handleSubmitSuccess(values) {
     const { setDialogIsOpen } = this.props;
     const getAccount = window.web3.eth.getAccounts();
     const SaveShip = contract(shipment_contract_artifacts);
@@ -93,7 +93,8 @@ class Job extends Component {
     }
   }
 
-  render () {
+  render() {
+
     const {
       history,
       intl,
@@ -132,13 +133,6 @@ class Job extends Component {
         icon: <FontIcon className='material-icons' color={muiTheme.palette.canvasColor}>save</FontIcon>,
         tooltip: intl.formatMessage({ id: 'save' }),
         onClick: () => { submit('shipment') }
-      },
-      {
-        hidden: uid === undefined || !isGranted(`delete_${form_name}`),
-        text: intl.formatMessage({ id: 'delete' }),
-        icon: <FontIcon className='material-icons' color={muiTheme.palette.canvasColor}>delete</FontIcon>,
-        tooltip: intl.formatMessage({ id: 'delete' }),
-        onClick: () => { setDialogIsOpen('delete_shipment', true) }
       }
     ];
 
@@ -195,7 +189,7 @@ class Job extends Component {
           </div>
         </Dialog>
       </Activity>
-    )
+    );
   }
 }
 
@@ -209,6 +203,7 @@ Job.propTypes = {
   muiTheme: PropTypes.object.isRequired,
   isGranted: PropTypes.func.isRequired
 };
+
 
 const mapStateToProps = (state) => {
   const { intl, dialogs, auth } = state;
